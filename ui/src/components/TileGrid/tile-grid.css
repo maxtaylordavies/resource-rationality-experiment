@@ -1,0 +1,12 @@
+.tile-grid-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.tile-grid-tile {
+  height: 50px;
+  width: 50px;
+  border-radius: 10px;
+  margin: 5px;
+  background-color: grey;
+}
