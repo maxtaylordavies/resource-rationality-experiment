@@ -10,6 +10,7 @@ ui/.pnp.js
 
 # production
 ui/build
+ui/dist
 
 # misc
 .DS_Store
