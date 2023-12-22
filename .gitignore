@@ -12,6 +12,8 @@ ui/.pnp.js
 ui/build
 ui/dist
 
+server/server
+
 # misc
 .DS_Store
 .env.local

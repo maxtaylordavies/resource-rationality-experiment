@@ -1,31 +1,29 @@
 import React, { useEffect } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { useStore } from "./store";
-import { GRID_SIZE } from "./constants";
-import { getRandomHeatmap } from "./api";
-import { TileGrid } from "./components/TileGrid/TileGrid";
+import EvidencePage from "./pages/EvidencePage";
+import TestPage from "./pages/TestPage";
 import "./App.css";
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <div>Hello world!</div>,
+  },
+  {
+    path: "/evidence",
+    element: <EvidencePage />,
+  },
+  {
+    path: "/test",
+    element: <TestPage />,
+  },
+]);
+
 const App = () => {
-  const heatmap = useStore((state) => state.heatmap);
-  const setHeatmap = useStore((state) => state.setHeatmap);
-  const setRandomFocusedTiles = useStore(
-    (state) => state.setRandomFocusedTiles
-  );
-
-  const doInitialSetup = async () => {
-    const hmap = await getRandomHeatmap();
-    setHeatmap(hmap);
-    setRandomFocusedTiles();
-  };
-
-  useEffect(() => {
-    doInitialSetup();
-  }, []);
-
   return (
     <div className="App">
-      <TileGrid rows={GRID_SIZE} cols={GRID_SIZE} dynamic={true} heatmap={[]} />
+      <RouterProvider router={router} />
     </div>
   );
 };
