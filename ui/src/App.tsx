@@ -1,22 +1,31 @@
 import React, { useEffect } from "react";
 
 import { useStore } from "./store";
+import { GRID_SIZE } from "./constants";
+import { getRandomHeatmap } from "./api";
 import { TileGrid } from "./components/TileGrid/TileGrid";
 import "./App.css";
 
 const App = () => {
-  const setFocusedTiles = useStore((state) => state.setFocusedTiles);
+  const heatmap = useStore((state) => state.heatmap);
+  const setHeatmap = useStore((state) => state.setHeatmap);
+  const setRandomFocusedTiles = useStore(
+    (state) => state.setRandomFocusedTiles
+  );
+
+  const doInitialSetup = async () => {
+    const hmap = await getRandomHeatmap();
+    setHeatmap(hmap);
+    setRandomFocusedTiles();
+  };
 
   useEffect(() => {
-    setFocusedTiles([
-      { row: 0, col: 0 },
-      { row: 2, col: 2 },
-    ]);
+    doInitialSetup();
   }, []);
 
   return (
     <div className="App">
-      <TileGrid rows={4} cols={4} />
+      <TileGrid rows={GRID_SIZE} cols={GRID_SIZE} dynamic={true} heatmap={[]} />
     </div>
   );
 };

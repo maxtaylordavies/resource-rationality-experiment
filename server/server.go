@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/handlers"
@@ -10,7 +11,7 @@ import (
 )
 
 const (
-	dbPath      = "jikji.db"
+	dbPath      = ""
 	distPath    = "ui/dist"
 	indexPath   = distPath + "/index.html"
 	logoPath    = "ui/public/logo.png"
@@ -40,12 +41,20 @@ func respond(w http.ResponseWriter, data interface{}) {
 type Server struct {
 	Router *mux.Router
 	Port   string
+	Store  Datastore
 }
 
 func CreateServer() (Server, error) {
 	s := Server{
 		Port: ":8002",
 	}
+
+	// initiate datastore
+	store, err := CreateDatastore(dbPath)
+	if err != nil {
+		return s, err
+	}
+	s.Store = store
 
 	// initiate router and return server
 	s.registerRoutes()
@@ -63,6 +72,26 @@ func (s *Server) registerRoutes() {
 			Status: "ok",
 		}
 		respond(w, payload)
+	})
+
+	// routes for serving api
+	s.Router.HandleFunc("/api/heatmap/random", func(w http.ResponseWriter, r *http.Request) {
+		sizeStr := r.URL.Query().Get("size")
+		size, err := strconv.Atoi(sizeStr)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		binsStr := r.URL.Query().Get("bins")
+		bins, err := strconv.Atoi(binsStr)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		heatmap := s.Store.RandomHeatmap(size, bins)
+		respond(w, heatmap)
 	})
 
 	// routes for serving ui
