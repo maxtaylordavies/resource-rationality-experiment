@@ -10,3 +10,8 @@ export const getRandomHeatmap = async () => {
   const response = await api.get(`/heatmap/random?size=${GRID_SIZE}&bins=4`);
   return response.data;
 };
+
+export const getHeatmapFromFile = async () => {
+  const response = await api.get(`/heatmap/from_file`);
+  return response.data as number[][];
+};

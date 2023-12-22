@@ -94,6 +94,11 @@ func (s *Server) registerRoutes() {
 		respond(w, heatmap)
 	})
 
+	s.Router.HandleFunc("/api/heatmap/from_file", func(w http.ResponseWriter, r *http.Request) {
+		// pipe heatmap directly from heatmap.txt to response
+		http.ServeFile(w, r, "heatmap.txt")
+	})
+
 	// routes for serving ui
 	s.Router.PathPrefix("/static").HandlerFunc(dirHandlerFunc(distPath, false))
 	for _, p := range []string{"images", "css", "fonts"} { // things we want client to cache with long expiration
