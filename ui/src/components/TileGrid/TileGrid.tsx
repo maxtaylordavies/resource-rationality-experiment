@@ -19,6 +19,7 @@ export const TileGrid = ({ rows, cols, dynamic, heatmap }: TileGridProps) => {
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles
   );
+  const incrementChoiceCount = useStore((state) => state.incrementChoiceCount);
 
   const tileValue = (row: number, col: number) => {
     if (!heatmap || heatmap.length === 0) return -1;
@@ -30,6 +31,12 @@ export const TileGrid = ({ rows, cols, dynamic, heatmap }: TileGridProps) => {
       dynamic &&
       focusedTiles.some((tile) => tile.row === row && tile.col === col)
     );
+  };
+
+  const onTileClick = () => {
+    if (!dynamic) return;
+    incrementChoiceCount();
+    setRandomFocusedTiles();
   };
 
   return (
@@ -47,7 +54,7 @@ export const TileGrid = ({ rows, cols, dynamic, heatmap }: TileGridProps) => {
                   key={col}
                   value={tileValue(i, j)}
                   type={type}
-                  onClick={setRandomFocusedTiles}
+                  onClick={onTileClick}
                 />
               );
             })}

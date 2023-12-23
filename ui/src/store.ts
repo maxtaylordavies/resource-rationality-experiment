@@ -34,6 +34,8 @@ export type GlobalState = {
   focusedTiles: Pos[];
   setFocusedTiles: (tiles: Pos[]) => void;
   setRandomFocusedTiles: () => void;
+  choiceCount: number;
+  incrementChoiceCount: () => void;
 };
 
 export const useStore = create<GlobalState>((set) => ({
@@ -42,4 +44,7 @@ export const useStore = create<GlobalState>((set) => ({
   focusedTiles: [],
   setFocusedTiles: (tiles: Pos[]) => set({ focusedTiles: tiles }),
   setRandomFocusedTiles: () => set({ focusedTiles: sampleRandomChoicePair() }),
+  choiceCount: 0,
+  incrementChoiceCount: () =>
+    set((state) => ({ choiceCount: state.choiceCount + 1 })),
 }));
