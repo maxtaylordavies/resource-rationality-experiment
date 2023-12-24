@@ -12,9 +12,10 @@ import (
 
 const (
 	dbPath      = "store.db"
-	distPath    = "ui/dist"
+	uiPath      = "ui"
+	distPath    = uiPath + "/dist"
 	indexPath   = distPath + "/index.html"
-	logoPath    = "ui/public/logo.png"
+	logoPath    = uiPath + "/public/logo.png"
 	faviconPath = distPath + "/favicon.ico"
 )
 
@@ -154,6 +155,9 @@ func (s *Server) registerRoutes() {
 			return
 		}
 	}).Methods("POST")
+
+	// assets
+	s.Router.PathPrefix("/assets").HandlerFunc(dirHandlerFunc(uiPath, false))
 
 	// routes for serving ui
 	s.Router.PathPrefix("/static").HandlerFunc(dirHandlerFunc(distPath, false))
