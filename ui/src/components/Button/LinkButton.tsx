@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { MotionProps, motion } from "framer-motion";
 
 import "./button.css";
@@ -10,12 +11,14 @@ interface Props extends MotionProps {
 }
 
 export const LinkButton = ({ label, to, ...props }: Props) => {
+  const navigate = useNavigate();
+
   return (
     <motion.button
       className="button"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      onClick={() => (window.location.href = to)}
+      onClick={() => navigate(to)}
       {...props}
     >
       {label}

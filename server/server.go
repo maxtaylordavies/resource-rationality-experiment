@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	dbPath      = ""
+	dbPath      = "store.db"
 	distPath    = "ui/dist"
 	indexPath   = distPath + "/index.html"
 	logoPath    = "ui/public/logo.png"
@@ -92,12 +92,68 @@ func (s *Server) registerRoutes() {
 
 		heatmap := s.Store.RandomHeatmap(size, bins)
 		respond(w, heatmap)
-	})
+	}).Methods("GET")
 
 	s.Router.HandleFunc("/api/heatmap/from_file", func(w http.ResponseWriter, r *http.Request) {
-		// pipe heatmap directly from heatmap.txt to response
-		http.ServeFile(w, r, "heatmap.txt")
-	})
+		id := r.URL.Query().Get("id")
+		if id == "" {
+			http.Error(w, "missing id", http.StatusBadRequest)
+			return
+		}
+
+		http.ServeFile(w, r, "heatmaps/"+id+".txt")
+	}).Methods("GET")
+
+	s.Router.HandleFunc("/api/sessions/all", func(w http.ResponseWriter, r *http.Request) {
+		sessions, err := s.Store.GetAllSessions()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		respond(w, sessions)
+	}).Methods("GET")
+
+	s.Router.HandleFunc("/api/sessions/create", func(w http.ResponseWriter, r *http.Request) {
+		decoder := json.NewDecoder(r.Body)
+		var payload struct {
+			ExperimentId string `json:"experiment_id"`
+			UserId       string `json:"user_id"`
+		}
+
+		err := decoder.Decode(&payload)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		respond(w, session)
+	}).Methods("POST")
+
+	s.Router.HandleFunc("/api/choices/record", func(w http.ResponseWriter, r *http.Request) {
+		decoder := json.NewDecoder(r.Body)
+		var payload struct {
+			SessionId    int          `json:"session_id"`
+			ChoiceResult ChoiceResult `json:"choice_result"`
+		}
+
+		err := decoder.Decode(&payload)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		err = s.Store.RecordChoiceResult(payload.SessionId, payload.ChoiceResult)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}).Methods("POST")
 
 	// routes for serving ui
 	s.Router.PathPrefix("/static").HandlerFunc(dirHandlerFunc(distPath, false))

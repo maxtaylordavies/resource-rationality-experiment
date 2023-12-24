@@ -3,39 +3,42 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { useStore } from "./store";
 import { NUM_CHOICES } from "./constants";
-import EvidencePage from "./pages/EvidencePage";
-import TestPage from "./pages/TestPage";
-import ExperimentCompletePage from "./pages/ExperimentCompletePage";
+import Instructions from "./pages/Instructions";
+import Evidence1 from "./pages/Evidence1";
+import Test1 from "./pages/Test1";
+import Evidence2 from "./pages/Evidence2";
+import Test2 from "./pages/Test2";
+import ExperimentComplete from "./pages/ExperimentComplete";
 import "./App.css";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Hello world!</div>,
+    element: <Instructions />,
   },
   {
-    path: "/evidence",
-    element: <EvidencePage />,
+    path: "/evidence1",
+    element: <Evidence1 />,
   },
   {
-    path: "/test",
-    element: <TestPage />,
+    path: "/test1",
+    element: <Test1 />,
+  },
+  {
+    path: "/evidence2",
+    element: <Evidence2 />,
+  },
+  {
+    path: "/test2",
+    element: <Test2 />,
   },
   {
     path: "/complete",
-    element: <ExperimentCompletePage />,
+    element: <ExperimentComplete />,
   },
 ]);
 
 const App = () => {
-  const choiceCount = useStore((state) => state.choiceCount);
-
-  useEffect(() => {
-    if (choiceCount === NUM_CHOICES) {
-      router.navigate("/complete");
-    }
-  }, [choiceCount]);
-
   return (
     <div className="App">
       <RouterProvider router={router} />

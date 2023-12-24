@@ -1,17 +1,38 @@
 import axios from "axios";
 
-import { GRID_SIZE } from "./constants";
+import { Session, Heatmap, ChoiceResult } from "./store";
 
 const api = axios.create({
   baseURL: "http://localhost:8002/api",
 });
 
-export const getRandomHeatmap = async () => {
-  const response = await api.get(`/heatmap/random?size=${GRID_SIZE}&bins=4`);
+export const createSession = async (
+  experimentId: string,
+  userId: string
+): Promise<Session> => {
+  const response = await api.post("/sessions/create", {
+    experiment_id: experimentId,
+    user_id: userId,
+  });
   return response.data;
 };
 
-export const getHeatmapFromFile = async () => {
-  const response = await api.get(`/heatmap/from_file`);
-  return response.data as number[][];
+// export const getRandomHeatmap = async (): Promise<Heatmap> => {
+//   const response = await api.get(`/heatmap/random?size=${GRID_SIZE}&bins=4`);
+//   return response.data;
+// };
+
+export const getHeatmapFromFile = async (id: string): Promise<Heatmap> => {
+  const response = await api.get(`/heatmap/from_file?id=${id}`);
+  return response.data;
+};
+
+export const recordChoiceResult = async (
+  sessionId: number,
+  choiceResult: ChoiceResult
+): Promise<void> => {
+  await api.post("/choices/record", {
+    session_id: sessionId,
+    choice_result: choiceResult,
+  });
 };

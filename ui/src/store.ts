@@ -1,19 +1,29 @@
 import { create } from "zustand";
 
-import { GRID_SIZE } from "./constants";
+export type Session = {
+  id: number;
+  experimentId: string;
+  userId: string;
+  createdAt: Date;
+};
 
-type Heatmap = number[][];
+export type Heatmap = number[][];
 
-type Pos = {
+export type Pos = {
   row: number;
   col: number;
 };
 
-const sampleRandomChoicePair = (minDist = 2): Pos[] => {
+export type ChoiceResult = {
+  choice: Pos[];
+  selected: number;
+};
+
+const sampleRandomChoicePair = (sideLength: number, minDist = 2): Pos[] => {
   const randTile = () => {
     return {
-      row: Math.floor(Math.random() * GRID_SIZE),
-      col: Math.floor(Math.random() * GRID_SIZE),
+      row: Math.floor(Math.random() * sideLength),
+      col: Math.floor(Math.random() * sideLength),
     };
   };
   const dist = (p1: Pos, p2: Pos) => {
@@ -29,6 +39,8 @@ const sampleRandomChoicePair = (minDist = 2): Pos[] => {
 };
 
 export type GlobalState = {
+  session: Session | null;
+  setSession: (session: Session) => void;
   heatmap: Heatmap;
   setHeatmap: (heatmap: Heatmap) => void;
   focusedTiles: Pos[];
@@ -36,15 +48,27 @@ export type GlobalState = {
   setRandomFocusedTiles: () => void;
   choiceCount: number;
   incrementChoiceCount: () => void;
+  resetChoiceCount: () => void;
+  // choiceHistory: ChoiceResult[];
+  // recordChoice: (result: ChoiceResult) => void;
 };
 
 export const useStore = create<GlobalState>((set) => ({
+  session: null,
+  setSession: (session: Session) => set({ session: session }),
   heatmap: [],
   setHeatmap: (heatmap: Heatmap) => set({ heatmap: heatmap }),
   focusedTiles: [],
   setFocusedTiles: (tiles: Pos[]) => set({ focusedTiles: tiles }),
-  setRandomFocusedTiles: () => set({ focusedTiles: sampleRandomChoicePair() }),
+  setRandomFocusedTiles: () =>
+    set((state) => ({
+      focusedTiles: sampleRandomChoicePair(state.heatmap.length),
+    })),
   choiceCount: 0,
   incrementChoiceCount: () =>
     set((state) => ({ choiceCount: state.choiceCount + 1 })),
+  resetChoiceCount: () => set({ choiceCount: 0 }),
+  // choiceHistory: [],
+  // recordChoice: (result: ChoiceResult) =>
+  //   set((state) => ({ choiceHistory: [...state.choiceHistory, result] })),
 }));

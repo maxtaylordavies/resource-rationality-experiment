@@ -1,30 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 import { COLORS } from "../../constants";
-import { useStore } from "../../store";
+import { Heatmap, useStore } from "../../store";
+import { recordChoiceResult } from "../../api";
 import "./tile-grid.css";
 
 type TileGridProps = {
-  rows: number;
-  cols: number;
   dynamic: boolean;
-  heatmap?: number[][];
+  revealValues?: boolean;
+  recordChoices?: boolean;
+  tileSize?: number;
 };
 
-export const TileGrid = ({ rows, cols, dynamic, heatmap }: TileGridProps) => {
-  console.log("heatmap", heatmap);
-
+export const TileGrid = ({
+  dynamic,
+  revealValues,
+  recordChoices,
+  tileSize = 50,
+}: TileGridProps) => {
+  const session = useStore((state) => state.session);
+  const heatmap = useStore((state) => state.heatmap);
   const focusedTiles = useStore((state) => state.focusedTiles);
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles
   );
   const incrementChoiceCount = useStore((state) => state.incrementChoiceCount);
+  const [colors, setColors] = useState<string[][]>([]);
 
-  const tileValue = (row: number, col: number) => {
-    if (!heatmap || heatmap.length === 0) return -1;
-    return heatmap[row][col];
+  const initialiseTileColors = () => {
+    const _colors: string[][] = [];
+    for (let i = 0; i < heatmap.length; i++) {
+      _colors.push([]);
+      for (let j = 0; j < heatmap.length; j++) {
+        _colors[i].push(dynamic ? "grey" : COLORS[heatmap[i][j]]);
+      }
+    }
+    return _colors;
   };
+
+  useEffect(() => {
+    if (heatmap.length > 0) {
+      setColors(initialiseTileColors());
+    }
+  }, [heatmap]);
 
   const isFocused = (row: number, col: number) => {
     return (
@@ -33,18 +52,55 @@ export const TileGrid = ({ rows, cols, dynamic, heatmap }: TileGridProps) => {
     );
   };
 
-  const onTileClick = () => {
-    if (!dynamic) return;
-    incrementChoiceCount();
-    setRandomFocusedTiles();
+  const updateColors = (
+    tiles: { row: number; col: number }[],
+    _colors: string[]
+  ) => {
+    const newColors = [...colors];
+    tiles.forEach((tile, idx) => {
+      newColors[tile.row][tile.col] = _colors[idx];
+    });
+    setColors(newColors);
   };
 
-  return (
+  const onTileClick = async (row: number, col: number) => {
+    if (!dynamic || session === null) return;
+
+    if (recordChoices) {
+      const selected = focusedTiles.findIndex(
+        (tile) => tile.row === row && tile.col === col
+      );
+      await recordChoiceResult(session.id, {
+        choice: focusedTiles,
+        selected,
+      });
+    }
+
+    if (revealValues) {
+      updateColors(
+        focusedTiles,
+        focusedTiles.map((tile) => COLORS[heatmap[tile.row][tile.col]])
+      );
+      setTimeout(() => {
+        updateColors(
+          focusedTiles,
+          focusedTiles.map(() => "grey")
+        );
+        incrementChoiceCount();
+        setRandomFocusedTiles();
+      }, 1000);
+    } else {
+      incrementChoiceCount();
+      setRandomFocusedTiles();
+    }
+  };
+
+  return colors && heatmap.length === colors.length ? (
     <div className="tile-grid">
-      {Array.from(Array(rows).keys()).map((row, i) => {
+      {Array.from(Array(heatmap.length).keys()).map((row, i) => {
         return (
           <div className="tile-grid-row" key={row}>
-            {Array.from(Array(cols).keys()).map((col, j) => {
+            {Array.from(Array(heatmap.length).keys()).map((col, j) => {
               let type: TileType = "normal";
               if (dynamic) {
                 type = isFocused(i, j) ? "focused" : "unfocused";
@@ -52,9 +108,10 @@ export const TileGrid = ({ rows, cols, dynamic, heatmap }: TileGridProps) => {
               return (
                 <Tile
                   key={col}
-                  value={tileValue(i, j)}
                   type={type}
-                  onClick={onTileClick}
+                  color={colors[i][j]}
+                  size={tileSize}
+                  onClick={() => onTileClick(i, j)}
                 />
               );
             })}
@@ -62,6 +119,8 @@ export const TileGrid = ({ rows, cols, dynamic, heatmap }: TileGridProps) => {
         );
       })}
     </div>
+  ) : (
+    <div />
   );
 };
 
@@ -69,30 +128,30 @@ type TileType = "focused" | "unfocused" | "normal";
 
 type TileProps = {
   key: number;
-  value: number;
   type?: TileType;
+  color: string;
+  size?: number;
   onClick: () => void;
 };
 
-const Tile = ({ key, value, type, onClick }: TileProps) => {
-  const color = value === -1 ? "grey" : COLORS[value];
-
+const Tile = ({ key, type, color, size, onClick }: TileProps) => {
   return (
     <motion.div
       key={key}
       className="tile-grid-tile"
-      initial={{ scale: 1.0, opacity: 0.5 }}
+      initial={{ opacity: 0.5 }}
       animate={{
-        scale: type === "focused" ? 1.1 : 1.0,
         opacity: type === "unfocused" ? 0.5 : 1.0,
       }}
-      whileHover={{ scale: type === "focused" ? 1.2 : 1.0 }}
+      whileHover={{ scale: type === "focused" ? 1.1 : 1.0 }}
       style={{
         backgroundColor: color,
         pointerEvents: type === "focused" ? "auto" : "none",
         cursor: "pointer",
+        width: size,
+        height: size,
       }}
       onClick={onClick}
-    ></motion.div>
+    />
   );
 };

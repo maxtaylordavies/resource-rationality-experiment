@@ -3,6 +3,9 @@ package main
 import (
 	"database/sql"
 	"math/rand"
+	"time"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Datastore struct {
@@ -11,14 +14,30 @@ type Datastore struct {
 
 type Heatmap [][]int
 
-func CreateDatastore(dbPath string) (Datastore, error) {
-	// db, err := sql.Open("sqlite3", dbPath)
-	// if err != nil {
-	// 	return Datastore{}, err
-	// }
+type Session struct {
+	ID           int       `json:"id"`
+	ExperimentId string    `json:"experiment_id"`
+	UserId       string    `json:"user_id"`
+	CreatedAt    time.Time `json:"created_at"`
+}
 
-	// return Datastore{DB: db}, nil
-	return Datastore{}, nil
+type Pos struct {
+	Row int `json:"row"`
+	Col int `json:"col"`
+}
+
+type ChoiceResult struct {
+	Choice   []Pos `json:"choice"`   // list of two positions
+	Selected int   `json:"selected"` // index of selected position (i.e. 0 or 1)
+}
+
+func CreateDatastore(dbPath string) (Datastore, error) {
+	db, err := sql.Open("sqlite3", dbPath)
+	if err != nil {
+		return Datastore{}, err
+	}
+
+	return Datastore{DB: db}, nil
 }
 
 func (ds *Datastore) Close() error {
@@ -35,4 +54,68 @@ func (ds *Datastore) RandomHeatmap(size int, bins int) Heatmap {
 		}
 	}
 	return heatmap
+}
+
+func (ds *Datastore) GetAllSessions() ([]Session, error) {
+	rows, err := ds.DB.Query("SELECT * FROM sessions")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var sessions []Session
+	for rows.Next() {
+		var session Session
+		err := rows.Scan(&session.ID, &session.ExperimentId, &session.UserId, &session.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		sessions = append(sessions, session)
+	}
+
+	return sessions, nil
+}
+
+func (ds *Datastore) CreateSession(experimentId string, userId string) (Session, error) {
+	stmt, err := ds.DB.Prepare("INSERT INTO sessions(experiment_id, user_id, created_at) values(?, ?, ?)")
+	if err != nil {
+		return Session{}, err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(experimentId, userId, time.Now())
+	if err != nil {
+		return Session{}, err
+	}
+
+	id, err := res.LastInsertId()
+	if err != nil {
+		return Session{}, err
+	}
+
+	return Session{
+		ID:           int(id),
+		ExperimentId: experimentId,
+		UserId:       userId,
+		CreatedAt:    time.Now(),
+	}, nil
+}
+
+func (ds *Datastore) RecordChoiceResult(sessionId int, choiceResult ChoiceResult) error {
+	stmt, err := ds.DB.Prepare("INSERT INTO choices(session_id, row1, col1, row2, col2, selected) values(?, ?, ?, ?, ?, ?)")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(
+		sessionId,
+		choiceResult.Choice[0].Row,
+		choiceResult.Choice[0].Col,
+		choiceResult.Choice[1].Row,
+		choiceResult.Choice[1].Col,
+		choiceResult.Selected,
+	)
+
+	return err
 }

@@ -1,11 +1,15 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useStore } from "../store";
-import { GRID_SIZE, NUM_CHOICES } from "../constants";
+import { NUM_CHOICES } from "../constants";
 import { TileGrid } from "../components/TileGrid/TileGrid";
 
 const TestPage = (): JSX.Element => {
+  const navigate = useNavigate();
+
   const choiceCount = useStore((state) => state.choiceCount);
+  const resetChoiceCount = useStore((state) => state.resetChoiceCount);
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles
   );
@@ -13,6 +17,13 @@ const TestPage = (): JSX.Element => {
   useEffect(() => {
     setRandomFocusedTiles();
   }, []);
+
+  useEffect(() => {
+    if (choiceCount === NUM_CHOICES) {
+      navigate("/evidence2");
+      resetChoiceCount();
+    }
+  }, [choiceCount]);
 
   return (
     <div className="page">
@@ -24,10 +35,10 @@ const TestPage = (): JSX.Element => {
           </span>
         </div>
         <TileGrid
-          rows={GRID_SIZE}
-          cols={GRID_SIZE}
           dynamic={true}
-          heatmap={[]}
+          tileSize={60}
+          revealValues={true}
+          recordChoices={false}
         />
       </div>
     </div>
