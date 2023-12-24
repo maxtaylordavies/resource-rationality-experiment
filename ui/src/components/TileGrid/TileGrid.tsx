@@ -7,6 +7,7 @@ import { recordChoiceResult } from "../../api";
 import "./tile-grid.css";
 
 type TileGridProps = {
+  heatmap: Heatmap;
   dynamic: boolean;
   revealValues?: boolean;
   recordChoices?: boolean;
@@ -14,13 +15,14 @@ type TileGridProps = {
 };
 
 export const TileGrid = ({
+  heatmap,
   dynamic,
   revealValues,
   recordChoices,
   tileSize = 50,
 }: TileGridProps) => {
   const session = useStore((state) => state.session);
-  const heatmap = useStore((state) => state.heatmap);
+  // const heatmap = useStore((state) => state.heatmap);
   const focusedTiles = useStore((state) => state.focusedTiles);
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles

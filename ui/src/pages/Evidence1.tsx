@@ -6,6 +6,7 @@ import { TileGrid } from "../components/TileGrid/TileGrid";
 import { LinkButton } from "../components/Button/LinkButton";
 
 const EvidencePage = (): JSX.Element => {
+  const heatmap = useStore((state) => state.heatmap);
   const setHeatmap = useStore((state) => state.setHeatmap);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const EvidencePage = (): JSX.Element => {
         src={window.location.origin + "/assets/robot-scale.png"}
         className="robot-scale-image"
       />
-      <TileGrid dynamic={false} tileSize={60} />
+      <TileGrid heatmap={heatmap} dynamic={false} tileSize={60} />
       <LinkButton to="/test1" label="Proceed" style={{ marginTop: 10 }} />
     </div>
   );

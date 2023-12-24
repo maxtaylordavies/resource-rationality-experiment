@@ -1,0 +1,20 @@
+.choice-count-box {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 160px;
+  height: 35px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #303030;
+  border: 2.5px solid #303030;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.choice-count {
+  margin-left: 5px;
+  font-weight: bold;
+}

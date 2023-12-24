@@ -8,7 +8,12 @@
 }
 
 .robot-scale-image {
-  width: 350px;
+  width: 300px;
+  margin-bottom: 40px;
+}
+
+.which-choose-image {
+  width: 450px;
   margin-bottom: 40px;
 }
 
@@ -17,23 +22,4 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-end;
-}
-
-.choice-count-box {
-  width: 160px;
-  height: 35px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  /* background-color: #ccc; */
-  color: #303030;
-  border: 2.5px solid #303030;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.choice-count {
-  margin-left: 5px;
-  font-weight: bold;
 }
