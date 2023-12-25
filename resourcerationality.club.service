@@ -1,0 +1,13 @@
+[Unit]
+Description=resource-rationality-experiment
+
+[Service]
+User=root
+Type=simple
+TimeoutSec=900
+ExecStartPre=/bin/sh -c 'cd server && /usr/local/go/bin/go build'
+ExecStart=/root/code/resource-rationality-experiment/server/server
+WorkingDirectory=/root/code/resource-rationality-experiment/
+
+[Install]
+WantedBy=multi-user.target
