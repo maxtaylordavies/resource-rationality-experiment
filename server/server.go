@@ -47,7 +47,7 @@ type Server struct {
 
 func CreateServer() (Server, error) {
 	s := Server{
-		Port: ":8002",
+		Port: ":8101",
 	}
 
 	// initiate datastore

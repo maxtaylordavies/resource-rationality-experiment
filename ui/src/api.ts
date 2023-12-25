@@ -3,7 +3,7 @@ import axios from "axios";
 import { Session, Heatmap, ChoiceResult } from "./store";
 
 const api = axios.create({
-  baseURL: "http://localhost:8002/api",
+  baseURL: `${window.location.protocol}//${window.location.host}/api`,
 });
 
 export const createSession = async (
