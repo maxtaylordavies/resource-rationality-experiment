@@ -27,7 +27,7 @@ const TestPage = (): JSX.Element => {
 
   return (
     <div className="page">
-      <ChoiceCounter numChoices={NUM_CHOICES} />
+      <ChoiceCounter numChoices={NUM_CHOICES} phaseTitle="test phase" />
       <img
         src={window.location.origin + "/assets/which-choose.png"}
         className="which-choose-image"

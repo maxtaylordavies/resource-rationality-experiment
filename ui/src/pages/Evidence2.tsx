@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useStore } from "../store";
 import { getHeatmapFromFile } from "../api";
 import { TileGrid } from "../components/TileGrid/TileGrid";
-import { LinkButton } from "../components/Button/LinkButton";
+import { CountdownLink } from "../components/CountdownLink/CountdownLink";
 
 const EvidencePage = (): JSX.Element => {
   const heatmap = useStore((state) => state.heatmap);
@@ -24,7 +24,7 @@ const EvidencePage = (): JSX.Element => {
         className="robot-scale-image"
       />
       <TileGrid heatmap={heatmap} dynamic={false} />
-      <LinkButton to="/test2" label="Proceed" style={{ marginTop: 10 }} />
+      <CountdownLink to="/test1" duration={10} />
     </div>
   );
 };

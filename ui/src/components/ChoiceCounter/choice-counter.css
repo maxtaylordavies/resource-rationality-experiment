@@ -1,8 +1,20 @@
-.choice-count-box {
+.choice-count-container {
   position: absolute;
-  top: 25px;
-  right: 25px;
-  width: 160px;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.choice-count-phase-title {
+  color: grey;
+  font-weight: 600;
+}
+
+.choice-count-box {
+  width: 130px;
   height: 35px;
   display: flex;
   flex-direction: row;
@@ -11,10 +23,10 @@
   color: #303030;
   border: 2.5px solid #303030;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-left: 5px;
 }
 
 .choice-count {
-  margin-left: 5px;
+  margin-right: 5px;
   font-weight: bold;
 }
