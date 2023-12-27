@@ -43,6 +43,8 @@ export type GlobalState = {
   setSession: (session: Session) => void;
   heatmap: Heatmap;
   setHeatmap: (heatmap: Heatmap) => void;
+  score: number;
+  incrementScore: (amount: number) => void;
   focusedTiles: Pos[];
   setFocusedTiles: (tiles: Pos[]) => void;
   setRandomFocusedTiles: () => void;
@@ -58,6 +60,9 @@ export const useStore = create<GlobalState>((set) => ({
   setSession: (session: Session) => set({ session: session }),
   heatmap: [],
   setHeatmap: (heatmap: Heatmap) => set({ heatmap: heatmap }),
+  score: 100,
+  incrementScore: (amount: number) =>
+    set((state) => ({ score: state.score + amount })),
   focusedTiles: [],
   setFocusedTiles: (tiles: Pos[]) => set({ focusedTiles: tiles }),
   setRandomFocusedTiles: () =>

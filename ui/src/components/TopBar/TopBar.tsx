@@ -9,11 +9,12 @@ type Props = {
 
 export const TopBar = ({ numChoices }: Props): JSX.Element => {
   const choiceCount = useStore((state) => state.choiceCount);
+  const score = useStore((state) => state.score);
 
   return (
     <div className="top-bar">
       <div />
-      <div className="score-box">100 points</div>
+      <div className="score-box">{score} points</div>
       <div className="choice-count-container">
         <div className="choice-count-box">
           <span className="choice-count">
