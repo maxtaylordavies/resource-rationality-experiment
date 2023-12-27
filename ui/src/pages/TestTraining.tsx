@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../store";
 import { NUM_CHOICES } from "../constants";
 import { TileGrid } from "../components/TileGrid/TileGrid";
-import { ChoiceCounter } from "../components/ChoiceCounter/ChoiceCounter";
+import { TopBar } from "../components/TopBar/TopBar";
 
 const TestPage = (): JSX.Element => {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const TestPage = (): JSX.Element => {
 
   return (
     <div className="page">
-      <ChoiceCounter numChoices={NUM_CHOICES} phaseTitle="training phase" />
+      <TopBar numChoices={NUM_CHOICES} />
       <img
         src={window.location.origin + "/assets/which-choose.png"}
         className="which-choose-image"
