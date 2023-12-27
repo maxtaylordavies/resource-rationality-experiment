@@ -5,7 +5,7 @@ import { getHeatmapFromFile } from "../api";
 import { TileGrid } from "../components/TileGrid/TileGrid";
 import { CountdownLink } from "../components/CountdownLink/CountdownLink";
 
-const EvidencePage = (): JSX.Element => {
+const EvidenceActual = (): JSX.Element => {
   const heatmap = useStore((state) => state.heatmap);
   const setHeatmap = useStore((state) => state.setHeatmap);
 
@@ -29,4 +29,4 @@ const EvidencePage = (): JSX.Element => {
   );
 };
 
-export default EvidencePage;
+export default EvidenceActual;

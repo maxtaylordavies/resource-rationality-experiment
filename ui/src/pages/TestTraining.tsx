@@ -6,7 +6,7 @@ import { NUM_CHOICES } from "../constants";
 import { TileGrid } from "../components/TileGrid/TileGrid";
 import { TopBar } from "../components/TopBar/TopBar";
 
-const TestPage = (): JSX.Element => {
+const TestTraining = (): JSX.Element => {
   const navigate = useNavigate();
 
   const heatmap = useStore((state) => state.heatmap);
@@ -45,4 +45,4 @@ const TestPage = (): JSX.Element => {
   );
 };
 
-export default TestPage;
+export default TestTraining;

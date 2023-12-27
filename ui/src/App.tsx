@@ -4,10 +4,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useStore } from "./store";
 import { NUM_CHOICES } from "./constants";
 import Instructions from "./pages/Instructions";
-import Evidence1 from "./pages/Evidence1";
-import Test1 from "./pages/Test1";
-import Evidence2 from "./pages/Evidence2";
-import Test2 from "./pages/Test2";
+import EvidenceTraining from "./pages/EvidenceTraining";
+import TestTraining from "./pages/TestTraining";
+import EvidenceActual from "./pages/EvidenceActual";
+import TestActual from "./pages/TestActual";
 import ExperimentComplete from "./pages/ExperimentComplete";
 import "./App.css";
 
@@ -18,19 +18,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/evidence1",
-    element: <Evidence1 />,
+    element: <EvidenceTraining />,
   },
   {
     path: "/test1",
-    element: <Test1 />,
+    element: <TestTraining />,
   },
   {
     path: "/evidence2",
-    element: <Evidence2 />,
+    element: <EvidenceActual />,
   },
   {
     path: "/test2",
-    element: <Test2 />,
+    element: <TestActual />,
   },
   {
     path: "/complete",
