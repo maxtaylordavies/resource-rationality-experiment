@@ -14,6 +14,76 @@
   align-items: center;
 }
 
+.instructions-page {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 240px;
+}
+
+.instructions-page h1 {
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: 800;
+  margin-bottom: 0;
+}
+
+.instructions-page .box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 168, 0, 0.15);
+  width: 650px;
+  height: 140px;
+  padding: 0 20px;
+  border-radius: 20px;
+  text-align: left;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: -0.5px;
+  margin-top: 15px;
+}
+
+.instructions-page .box img {
+  width: 100px;
+  margin-left: 60px;
+}
+
+.instructions-page .button-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 40px;
+}
+
+.instructions-page .button-container button {
+  width: 170px;
+  height: 50px;
+  border-radius: 30px;
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.instructions-page .button-container .next-button {
+  background-color: #00c14d;
+  color: white;
+  border: none;
+}
+
+.instructions-page .button-container .back-button {
+  background-color: white;
+  color: black;
+  border: 4px solid black;
+}
+
 .robot-scale-image {
   width: 300px;
   margin-bottom: 40px;
