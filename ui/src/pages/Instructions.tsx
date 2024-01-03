@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 
+import { Button } from "../components/Button/Button";
 import { useStore } from "../store";
 import { createSession } from "../api";
 import { getValueFromUrlOrLocalstorage } from "../utils";
@@ -54,10 +54,7 @@ const content: ContentItem[][] = [
 
 const InstructionsPage = (): JSX.Element => {
   const navigate = useNavigate();
-
-  const session = useStore((state) => state.session);
   const setSession = useStore((state) => state.setSession);
-
   const [page, setPage] = useState(0);
 
   useEffect(() => {
@@ -75,7 +72,7 @@ const InstructionsPage = (): JSX.Element => {
     if (page < content.length - 1) {
       setPage(page + 1);
     } else {
-      navigate("/evidence1");
+      navigate("/tutorial/start");
     }
   };
 
@@ -90,23 +87,18 @@ const InstructionsPage = (): JSX.Element => {
       ))}
       <div className="button-container">
         {page > 0 && (
-          <motion.button
-            className="back-button"
+          <Button
+            label="Back"
             onClick={() => setPage(page - 1)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Back
-          </motion.button>
+            variant="secondary"
+            style={{ marginRight: 20 }}
+          />
         )}
-        <motion.button
-          className="next-button"
+        <Button
+          label={page === content.length - 1 ? "Begin" : "Next"}
           onClick={onNextClick}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Next
-        </motion.button>
+          variant="primary"
+        />
       </div>
     </div>
   );
