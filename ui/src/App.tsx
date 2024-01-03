@@ -1,40 +1,43 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { useStore } from "./store";
-import { NUM_CHOICES } from "./constants";
-import Instructions from "./pages/Instructions";
-import EvidenceTraining from "./pages/EvidenceTraining";
-import TestTraining from "./pages/TestTraining";
-import EvidenceActual from "./pages/EvidenceActual";
-import TestActual from "./pages/TestActual";
-import ExperimentComplete from "./pages/ExperimentComplete";
+import InstructionsPage from "./pages/Instructions";
+import TutorialStartPage from "./pages/Tutorial/Start";
+import TutorialEvidencePage from "./pages/Tutorial/Evidence";
+import TutorialTestPage from "./pages/Tutorial/Test";
+import MainEvidencePage from "./pages/Main/Evidence";
+import MainTestPage from "./pages/Main/Test";
+import ExperimentCompletePage from "./pages/ExperimentComplete";
 import "./App.css";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Instructions />,
+    element: <InstructionsPage />,
   },
   {
-    path: "/evidence1",
-    element: <EvidenceTraining />,
+    path: "/tutorial/start",
+    element: <TutorialStartPage />,
   },
   {
-    path: "/test1",
-    element: <TestTraining />,
+    path: "/tutorial/evidence",
+    element: <TutorialEvidencePage />,
   },
   {
-    path: "/evidence2",
-    element: <EvidenceActual />,
+    path: "/tutorial/test",
+    element: <TutorialTestPage />,
   },
   {
-    path: "/test2",
-    element: <TestActual />,
+    path: "/main/evidence",
+    element: <MainEvidencePage />,
+  },
+  {
+    path: "/main/test",
+    element: <MainTestPage />,
   },
   {
     path: "/complete",
-    element: <ExperimentComplete />,
+    element: <ExperimentCompletePage />,
   },
 ]);
 

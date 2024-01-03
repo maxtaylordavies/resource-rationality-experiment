@@ -1,17 +1,16 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useStore } from "../store";
-import { NUM_CHOICES } from "../constants";
-import { TileGrid } from "../components/TileGrid/TileGrid";
-import { TopBar } from "../components/TopBar/TopBar";
+import { useStore } from "../../store";
+import { NUM_CHOICES } from "../../constants";
+import { TileGrid } from "../../components/TileGrid/TileGrid";
+import { TopBar } from "../../components/TopBar/TopBar";
 
-const TestTraining = (): JSX.Element => {
+const TestActual = (): JSX.Element => {
   const navigate = useNavigate();
 
   const heatmap = useStore((state) => state.heatmap);
   const choiceCount = useStore((state) => state.choiceCount);
-  const resetChoiceCount = useStore((state) => state.resetChoiceCount);
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles
   );
@@ -22,8 +21,7 @@ const TestTraining = (): JSX.Element => {
 
   useEffect(() => {
     if (choiceCount === NUM_CHOICES) {
-      navigate("/evidence2");
-      resetChoiceCount();
+      navigate("/complete");
     }
   }, [choiceCount]);
 
@@ -37,12 +35,11 @@ const TestTraining = (): JSX.Element => {
       <TileGrid
         heatmap={heatmap}
         dynamic={true}
-        tileSize={60}
-        revealValues={true}
-        recordChoices={false}
+        revealValues={false}
+        recordChoices={true}
       />
     </div>
   );
 };
 
-export default TestTraining;
+export default TestActual;
