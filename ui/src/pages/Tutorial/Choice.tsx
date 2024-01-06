@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useStore } from "../../store";
 import { NUM_CHOICES } from "../../constants";
+import { Box } from "../../components/Box/Box";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
 import { TopBar } from "../../components/TopBar/TopBar";
 
@@ -22,13 +23,13 @@ const ChoicePage = (): JSX.Element => {
 
   useEffect(() => {
     if (choiceCount === NUM_CHOICES) {
-      navigate("/tutorial/start");
+      navigate("/tutorial/complete");
       resetChoiceCount();
     }
   }, [choiceCount]);
 
   return (
-    <div className="page">
+    <Box className="page">
       <TopBar numChoices={NUM_CHOICES} phase="Tutorial" />
       <div className="choice-grid-container">
         <img
@@ -45,7 +46,7 @@ const ChoicePage = (): JSX.Element => {
           tileRadius={20}
         />
       </div>
-    </div>
+    </Box>
   );
 };
 

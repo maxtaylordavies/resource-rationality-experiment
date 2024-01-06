@@ -5,6 +5,7 @@ import InstructionsPage from "./pages/Instructions";
 import TutorialStartPage from "./pages/Tutorial/Start";
 import TutorialEvidencePage from "./pages/Tutorial/Evidence";
 import TutorialChoicePage from "./pages/Tutorial/Choice";
+import TutorialCompletePage from "./pages/Tutorial/Complete";
 import MainEvidencePage from "./pages/Main/Evidence";
 import MainChoicePage from "./pages/Main/Choice";
 import ExperimentCompletePage from "./pages/ExperimentComplete";
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/tutorial/choice",
     element: <TutorialChoicePage />,
+  },
+  {
+    path: "/tutorial/complete",
+    element: <TutorialCompletePage />,
   },
   {
     path: "/main/evidence",

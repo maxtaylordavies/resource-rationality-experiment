@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
+import { Box } from "../components/Box/Box";
 import { Button } from "../components/Button/Button";
 import { useStore } from "../store";
 import { createSession } from "../api";
@@ -77,13 +79,13 @@ const InstructionsPage = (): JSX.Element => {
   };
 
   return (
-    <div className="instructions-page">
+    <Box className="instructions-page">
       <h1>Instructions</h1>
-      {content[page].map((item, idx) => (
-        <div key={idx} className="box">
+      {content[page].map((item) => (
+        <Box key={item.text} className="box">
           <span>{item.text}</span>
           <img src={window.location.origin + "/assets/" + item.imgUrl} />
-        </div>
+        </Box>
       ))}
       <div className="button-container">
         {page > 0 && (
@@ -100,7 +102,7 @@ const InstructionsPage = (): JSX.Element => {
           variant="primary"
         />
       </div>
-    </div>
+    </Box>
   );
 };
 

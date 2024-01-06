@@ -1,10 +1,11 @@
 import React from "react";
 
+import { Box } from "../../components/Box/Box";
 import { LinkButton } from "../../components/Button/LinkButton";
 
 const StartPage = (): JSX.Element => {
   return (
-    <div className="page">
+    <Box className="page">
       <div className="tutorial-start-container">
         <h1>Tutorial</h1>
         <p>
@@ -26,7 +27,7 @@ const StartPage = (): JSX.Element => {
           style={{ marginTop: 60 }}
         />
       </div>
-    </div>
+    </Box>
   );
 };
 

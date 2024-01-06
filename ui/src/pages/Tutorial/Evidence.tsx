@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 import { useStore } from "../../store";
 import { getHeatmapFromFile } from "../../api";
+import { Box } from "../../components/Box/Box";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
 import { CountdownLink } from "../../components/CountdownLink/CountdownLink";
 
@@ -18,7 +19,7 @@ const EvidencePage = (): JSX.Element => {
   }, []);
 
   return (
-    <div className="page">
+    <Box className="page">
       <div className="evidence-grid-container">
         <img
           src={window.location.origin + "/assets/key-potato.png"}
@@ -37,7 +38,7 @@ const EvidencePage = (): JSX.Element => {
         duration={10}
         className="corner-countdown-link"
       />
-    </div>
+    </Box>
   );
 };
 
