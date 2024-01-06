@@ -91,7 +91,7 @@ const InstructionsPage = (): JSX.Element => {
             label="Back"
             onClick={() => setPage(page - 1)}
             variant="secondary"
-            style={{ marginRight: 20 }}
+            style={{ marginRight: 10 }}
           />
         )}
         <Button

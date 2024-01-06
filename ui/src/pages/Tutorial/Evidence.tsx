@@ -19,12 +19,24 @@ const EvidencePage = (): JSX.Element => {
 
   return (
     <div className="page">
-      <img
-        src={window.location.origin + "/assets/robot-scale.png"}
-        className="robot-scale-image"
+      <div className="evidence-grid-container">
+        <img
+          src={window.location.origin + "/assets/key-potato.png"}
+          className="evidence-key-image"
+        />
+        <TileGrid
+          heatmap={heatmap}
+          dynamic={false}
+          tileSize={130}
+          tileMargin={5}
+          tileRadius={20}
+        />
+      </div>
+      <CountdownLink
+        to="/tutorial/choice"
+        duration={10}
+        className="corner-countdown-link"
       />
-      <TileGrid heatmap={heatmap} dynamic={false} tileSize={60} />
-      <CountdownLink to="/test1" duration={10} />
     </div>
   );
 };

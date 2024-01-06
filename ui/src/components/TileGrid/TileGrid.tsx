@@ -12,6 +12,8 @@ type TileGridProps = {
   revealValues?: boolean;
   recordChoices?: boolean;
   tileSize?: number;
+  tileMargin?: number;
+  tileRadius?: number;
 };
 
 export const TileGrid = ({
@@ -20,6 +22,8 @@ export const TileGrid = ({
   revealValues,
   recordChoices,
   tileSize = 50,
+  tileMargin = 3,
+  tileRadius = 10,
 }: TileGridProps) => {
   const session = useStore((state) => state.session);
   // const heatmap = useStore((state) => state.heatmap);
@@ -112,8 +116,10 @@ export const TileGrid = ({
                   key={col}
                   type={type}
                   color={colors[i][j]}
-                  size={tileSize}
                   onClick={() => onTileClick(i, j)}
+                  size={tileSize}
+                  margin={tileMargin}
+                  radius={tileRadius}
                 />
               );
             })}
@@ -134,9 +140,19 @@ type TileProps = {
   color: string;
   size?: number;
   onClick: () => void;
+  margin?: number;
+  radius?: number;
 };
 
-const Tile = ({ key, type, color, size, onClick }: TileProps) => {
+const Tile = ({
+  key,
+  type,
+  color,
+  size,
+  onClick,
+  margin = 3,
+  radius = 10,
+}: TileProps) => {
   return (
     <motion.div
       key={key}
@@ -152,6 +168,8 @@ const Tile = ({ key, type, color, size, onClick }: TileProps) => {
         cursor: "pointer",
         width: size,
         height: size,
+        margin: margin,
+        borderRadius: radius,
       }}
       onClick={onClick}
     />

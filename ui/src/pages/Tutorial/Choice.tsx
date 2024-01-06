@@ -6,7 +6,7 @@ import { NUM_CHOICES } from "../../constants";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
 import { TopBar } from "../../components/TopBar/TopBar";
 
-const TestPage = (): JSX.Element => {
+const ChoicePage = (): JSX.Element => {
   const navigate = useNavigate();
 
   const heatmap = useStore((state) => state.heatmap);
@@ -22,27 +22,31 @@ const TestPage = (): JSX.Element => {
 
   useEffect(() => {
     if (choiceCount === NUM_CHOICES) {
-      navigate("/evidence2");
+      navigate("/tutorial/start");
       resetChoiceCount();
     }
   }, [choiceCount]);
 
   return (
     <div className="page">
-      <TopBar numChoices={NUM_CHOICES} />
-      <img
-        src={window.location.origin + "/assets/which-choose.png"}
-        className="which-choose-image"
-      />
-      <TileGrid
-        heatmap={heatmap}
-        dynamic={true}
-        tileSize={60}
-        revealValues={true}
-        recordChoices={false}
-      />
+      <TopBar numChoices={NUM_CHOICES} phase="Tutorial" />
+      <div className="choice-grid-container">
+        <img
+          src={window.location.origin + "/assets/which-plot.png"}
+          className="which-choice-image"
+        />
+        <TileGrid
+          heatmap={heatmap}
+          dynamic={true}
+          revealValues={true}
+          recordChoices={false}
+          tileSize={130}
+          tileMargin={5}
+          tileRadius={20}
+        />
+      </div>
     </div>
   );
 };
 
-export default TestPage;
+export default ChoicePage;

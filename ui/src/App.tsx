@@ -4,9 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import InstructionsPage from "./pages/Instructions";
 import TutorialStartPage from "./pages/Tutorial/Start";
 import TutorialEvidencePage from "./pages/Tutorial/Evidence";
-import TutorialTestPage from "./pages/Tutorial/Test";
+import TutorialChoicePage from "./pages/Tutorial/Choice";
 import MainEvidencePage from "./pages/Main/Evidence";
-import MainTestPage from "./pages/Main/Test";
+import MainChoicePage from "./pages/Main/Choice";
 import ExperimentCompletePage from "./pages/ExperimentComplete";
 import "./App.css";
 
@@ -24,16 +24,16 @@ const router = createBrowserRouter([
     element: <TutorialEvidencePage />,
   },
   {
-    path: "/tutorial/test",
-    element: <TutorialTestPage />,
+    path: "/tutorial/choice",
+    element: <TutorialChoicePage />,
   },
   {
     path: "/main/evidence",
     element: <MainEvidencePage />,
   },
   {
-    path: "/main/test",
-    element: <MainTestPage />,
+    path: "/main/choice",
+    element: <MainChoicePage />,
   },
   {
     path: "/complete",

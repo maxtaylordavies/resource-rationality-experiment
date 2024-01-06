@@ -2,25 +2,37 @@
   position: fixed;
   top: 0;
   left: 0;
+  padding: 12px;
   width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 24px;
+  font-weight: 500;
+  color: black;
+}
+
+.phase-name {
+  width: 190px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.score-box {
+  width: 170px;
+  height: 42px;
+  border-radius: 21px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  background-color: black;
+  color: white;
 }
 
-.score-box {
-  margin-top: 10px;
-}
-
-.choice-count-container {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
+.score-box-score {
+  font-weight: 800;
+  margin-right: 5px;
 }
 
 .choice-count-phase-title {
@@ -29,19 +41,17 @@
 }
 
 .choice-count-box {
-  width: 130px;
-  height: 35px;
+  width: 190px;
+  height: 42px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  color: #303030;
-  border: 2.5px solid #303030;
+  border: 2.5px solid black;
   border-radius: 8px;
-  margin-left: 5px;
 }
 
 .choice-count {
   margin-right: 5px;
-  font-weight: bold;
+  font-weight: 800;
 }

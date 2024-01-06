@@ -6,7 +6,7 @@ import { NUM_CHOICES } from "../../constants";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
 import { TopBar } from "../../components/TopBar/TopBar";
 
-const TestActual = (): JSX.Element => {
+const ChoicePage = (): JSX.Element => {
   const navigate = useNavigate();
 
   const heatmap = useStore((state) => state.heatmap);
@@ -27,7 +27,7 @@ const TestActual = (): JSX.Element => {
 
   return (
     <div className="page">
-      <TopBar numChoices={NUM_CHOICES} />
+      <TopBar numChoices={NUM_CHOICES} phase="Main experiment" />
       <img
         src={window.location.origin + "/assets/which-choose.png"}
         className="which-choose-image"
@@ -42,4 +42,4 @@ const TestActual = (): JSX.Element => {
   );
 };
 
-export default TestActual;
+export default ChoicePage;
