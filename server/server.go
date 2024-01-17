@@ -115,11 +115,28 @@ func (s *Server) registerRoutes() {
 		respond(w, sessions)
 	}).Methods("GET")
 
+	s.Router.HandleFunc("/api/sessions/get", func(w http.ResponseWriter, r *http.Request) {
+		idStr := r.URL.Query().Get("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		session, err := s.Store.GetSession(id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		respond(w, session)
+	}).Methods("GET")
+
 	s.Router.HandleFunc("/api/sessions/create", func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
 		var payload struct {
 			ExperimentId string `json:"experiment_id"`
 			UserId       string `json:"user_id"`
+			ChoiceReward int    `json:"choice_reward"`
 		}
 
 		err := decoder.Decode(&payload)
@@ -128,7 +145,7 @@ func (s *Server) registerRoutes() {
 			return
 		}
 
-		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId)
+		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.ChoiceReward)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

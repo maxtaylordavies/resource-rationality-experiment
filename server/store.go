@@ -19,6 +19,7 @@ type Session struct {
 	ExperimentId string    `json:"experiment_id"`
 	UserId       string    `json:"user_id"`
 	CreatedAt    time.Time `json:"created_at"`
+	ChoiceReward int       `json:"choice_reward"`
 }
 
 type Pos struct {
@@ -57,7 +58,7 @@ func (ds *Datastore) RandomHeatmap(size int, bins int) Heatmap {
 }
 
 func (ds *Datastore) GetAllSessions() ([]Session, error) {
-	rows, err := ds.DB.Query("SELECT * FROM sessions")
+	rows, err := ds.DB.Query("SELECT id, experiment_id, user_id, created_at, choice_reward FROM sessions")
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +67,7 @@ func (ds *Datastore) GetAllSessions() ([]Session, error) {
 	var sessions []Session
 	for rows.Next() {
 		var session Session
-		err := rows.Scan(&session.ID, &session.ExperimentId, &session.UserId, &session.CreatedAt)
+		err := rows.Scan(&session.ID, &session.ExperimentId, &session.UserId, &session.CreatedAt, &session.ChoiceReward)
 		if err != nil {
 			return nil, err
 		}
@@ -76,14 +77,24 @@ func (ds *Datastore) GetAllSessions() ([]Session, error) {
 	return sessions, nil
 }
 
-func (ds *Datastore) CreateSession(experimentId string, userId string) (Session, error) {
-	stmt, err := ds.DB.Prepare("INSERT INTO sessions(experiment_id, user_id, created_at) values(?, ?, ?)")
+func (ds *Datastore) GetSession(id int) (Session, error) {
+	var session Session
+	err := ds.DB.QueryRow("SELECT id, experiment_id, user_id, created_at, choice_reward FROM sessions WHERE id=?", id).Scan(&session.ID, &session.ExperimentId, &session.UserId, &session.CreatedAt, &session.ChoiceReward)
+	if err != nil {
+		return Session{}, err
+	}
+
+	return session, nil
+}
+
+func (ds *Datastore) CreateSession(experimentId string, userId string, choiceReward int) (Session, error) {
+	stmt, err := ds.DB.Prepare("INSERT INTO sessions(experiment_id, user_id, created_at, choice_reward) values(?, ?, ?, ?)")
 	if err != nil {
 		return Session{}, err
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(experimentId, userId, time.Now())
+	res, err := stmt.Exec(experimentId, userId, time.Now(), choiceReward)
 	if err != nil {
 		return Session{}, err
 	}
@@ -98,6 +109,7 @@ func (ds *Datastore) CreateSession(experimentId string, userId string) (Session,
 		ExperimentId: experimentId,
 		UserId:       userId,
 		CreatedAt:    time.Now(),
+		ChoiceReward: choiceReward,
 	}, nil
 }
 

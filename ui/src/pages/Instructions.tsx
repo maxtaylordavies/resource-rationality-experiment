@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 
 import { Box } from "../components/Box/Box";
 import { Button } from "../components/Button/Button";
-import { useStore } from "../store";
-import { createSession } from "../api";
-import { getValueFromUrlOrLocalstorage } from "../utils";
+import { Session, useStore } from "../store";
+import { getSession, createSession } from "../api";
+import { getValueFromUrlOrLocalstorage, writeToLocalStorage } from "../utils";
 
 type ContentItem = {
   text: string;
@@ -61,11 +61,25 @@ const InstructionsPage = (): JSX.Element => {
 
   useEffect(() => {
     const setup = async () => {
-      const session = await createSession(
-        getValueFromUrlOrLocalstorage("expId"),
-        getValueFromUrlOrLocalstorage("userId")
-      );
-      setSession(session);
+      let sess;
+
+      // check for existing session
+      const sid = getValueFromUrlOrLocalstorage("sessionid");
+      if (sid) {
+        sess = await getSession(sid);
+      }
+
+      // create new session if none exists
+      if (!sess) {
+        sess = await createSession(
+          getValueFromUrlOrLocalstorage("expid"),
+          getValueFromUrlOrLocalstorage("userid")
+        );
+      }
+
+      // save session id to localstorage and save session to global store
+      writeToLocalStorage("sessionid", sess.id);
+      setSession(sess);
     };
     setup();
   }, []);

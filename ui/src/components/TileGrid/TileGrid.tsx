@@ -31,6 +31,7 @@ export const TileGrid = ({
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles
   );
+  const incrementScore = useStore((state) => state.incrementScore);
   const incrementChoiceCount = useStore((state) => state.incrementChoiceCount);
   const [colors, setColors] = useState<string[][]>([]);
 
@@ -72,10 +73,15 @@ export const TileGrid = ({
   const onTileClick = async (row: number, col: number) => {
     if (!dynamic || session === null) return;
 
+    const selected = focusedTiles.findIndex(
+      (tile) => tile.row === row && tile.col === col
+    );
+    const values = focusedTiles.map((tile) => heatmap[tile.row][tile.col]);
+    if (values[selected] === Math.max(...values)) {
+      incrementScore(session.choiceReward);
+    }
+
     if (recordChoices) {
-      const selected = focusedTiles.findIndex(
-        (tile) => tile.row === row && tile.col === col
-      );
       await recordChoiceResult(session.id, {
         choice: focusedTiles,
         selected,

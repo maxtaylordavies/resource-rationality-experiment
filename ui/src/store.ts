@@ -5,6 +5,7 @@ export type Session = {
   experimentId: string;
   userId: string;
   createdAt: Date;
+  choiceReward: number;
 };
 
 export type Heatmap = number[][];
@@ -60,7 +61,7 @@ export const useStore = create<GlobalState>((set) => ({
   setSession: (session: Session) => set({ session: session }),
   heatmap: [],
   setHeatmap: (heatmap: Heatmap) => set({ heatmap: heatmap }),
-  score: 100,
+  score: 0,
   incrementScore: (amount: number) =>
     set((state) => ({ score: state.score + amount })),
   focusedTiles: [],

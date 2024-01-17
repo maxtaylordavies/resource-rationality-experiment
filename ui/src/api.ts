@@ -8,19 +8,21 @@ const api = axios.create({
 
 export const createSession = async (
   experimentId: string,
-  userId: string
+  userId: string,
+  choiceReward = 10
 ): Promise<Session> => {
   const response = await api.post("/sessions/create", {
     experiment_id: experimentId,
     user_id: userId,
+    choice_reward: choiceReward,
   });
   return response.data;
 };
 
-// export const getRandomHeatmap = async (): Promise<Heatmap> => {
-//   const response = await api.get(`/heatmap/random?size=${GRID_SIZE}&bins=4`);
-//   return response.data;
-// };
+export const getSession = async (sessionId: number): Promise<Session> => {
+  const response = await api.get(`/sessions/get?id=${sessionId}`);
+  return response.data;
+};
 
 export const getHeatmapFromFile = async (id: string): Promise<Heatmap> => {
   const response = await api.get(`/heatmap/from_file?id=${id}`);
