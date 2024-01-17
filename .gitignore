@@ -11,8 +11,11 @@ ui/.pnp.js
 # production
 ui/build
 ui/dist
-
 server/server
+
+# python
+**/__pycache__
+**/*.pyc
 
 # misc
 .DS_Store
