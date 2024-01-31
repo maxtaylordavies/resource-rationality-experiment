@@ -1,11 +1,13 @@
 import { create } from "zustand";
 
+import { INITIAL_SCORE } from "./constants";
+
 export type Session = {
   id: number;
-  experimentId: string;
-  userId: string;
-  createdAt: Date;
-  choiceReward: number;
+  experiment_id: string;
+  user_id: string;
+  created_at: Date;
+  choice_reward: number;
 };
 
 export type Heatmap = number[][];
@@ -44,8 +46,11 @@ export type GlobalState = {
   setSession: (session: Session) => void;
   heatmap: Heatmap;
   setHeatmap: (heatmap: Heatmap) => void;
+  round: number;
+  incrementRound: () => void;
   score: number;
   incrementScore: (amount: number) => void;
+  resetScore: () => void;
   focusedTiles: Pos[];
   setFocusedTiles: (tiles: Pos[]) => void;
   setRandomFocusedTiles: () => void;
@@ -61,9 +66,12 @@ export const useStore = create<GlobalState>((set) => ({
   setSession: (session: Session) => set({ session: session }),
   heatmap: [],
   setHeatmap: (heatmap: Heatmap) => set({ heatmap: heatmap }),
-  score: 0,
+  round: 1,
+  incrementRound: () => set((state) => ({ round: state.round + 1 })),
+  score: INITIAL_SCORE,
   incrementScore: (amount: number) =>
     set((state) => ({ score: state.score + amount })),
+  resetScore: () => set({ score: INITIAL_SCORE }),
   focusedTiles: [],
   setFocusedTiles: (tiles: Pos[]) => set({ focusedTiles: tiles }),
   setRandomFocusedTiles: () =>

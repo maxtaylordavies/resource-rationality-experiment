@@ -21,7 +21,7 @@ export const TileGrid = ({
   dynamic,
   revealValues,
   recordChoices,
-  tileSize = 50,
+  tileSize = 60,
   tileMargin = 3,
   tileRadius = 10,
 }: TileGridProps) => {
@@ -29,7 +29,7 @@ export const TileGrid = ({
   // const heatmap = useStore((state) => state.heatmap);
   const focusedTiles = useStore((state) => state.focusedTiles);
   const setRandomFocusedTiles = useStore(
-    (state) => state.setRandomFocusedTiles
+    (state) => state.setRandomFocusedTiles,
   );
   const incrementScore = useStore((state) => state.incrementScore);
   const incrementChoiceCount = useStore((state) => state.incrementChoiceCount);
@@ -61,7 +61,7 @@ export const TileGrid = ({
 
   const updateColors = (
     tiles: { row: number; col: number }[],
-    _colors: string[]
+    _colors: string[],
   ) => {
     const newColors = [...colors];
     tiles.forEach((tile, idx) => {
@@ -74,11 +74,12 @@ export const TileGrid = ({
     if (!dynamic || session === null) return;
 
     const selected = focusedTiles.findIndex(
-      (tile) => tile.row === row && tile.col === col
+      (tile) => tile.row === row && tile.col === col,
     );
     const values = focusedTiles.map((tile) => heatmap[tile.row][tile.col]);
     if (values[selected] === Math.max(...values)) {
-      incrementScore(session.choiceReward);
+      console.log(`incrementing score by ${session.choice_reward}`);
+      incrementScore(session.choice_reward);
     }
 
     if (recordChoices) {
@@ -91,12 +92,12 @@ export const TileGrid = ({
     if (revealValues) {
       updateColors(
         focusedTiles,
-        focusedTiles.map((tile) => COLORS[heatmap[tile.row][tile.col]])
+        focusedTiles.map((tile) => COLORS[heatmap[tile.row][tile.col]]),
       );
       setTimeout(() => {
         updateColors(
           focusedTiles,
-          focusedTiles.map(() => "grey")
+          focusedTiles.map(() => "grey"),
         );
         incrementChoiceCount();
         setRandomFocusedTiles();

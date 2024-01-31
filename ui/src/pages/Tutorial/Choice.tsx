@@ -14,27 +14,28 @@ const ChoicePage = (): JSX.Element => {
   const choiceCount = useStore((state) => state.choiceCount);
   const resetChoiceCount = useStore((state) => state.resetChoiceCount);
   const setRandomFocusedTiles = useStore(
-    (state) => state.setRandomFocusedTiles
+    (state) => state.setRandomFocusedTiles,
   );
 
   useEffect(() => {
     setRandomFocusedTiles();
-  }, []);
+  });
 
   useEffect(() => {
     if (choiceCount === NUM_CHOICES) {
       navigate("/tutorial/complete");
       resetChoiceCount();
     }
-  }, [choiceCount]);
+  }, [choiceCount, navigate, resetChoiceCount]);
 
   return (
     <Box className="page">
-      <TopBar numChoices={NUM_CHOICES} phase="Tutorial" />
+      <TopBar numChoices={NUM_CHOICES} />
       <div className="choice-grid-container">
         <img
           src={window.location.origin + "/assets/which-plot.png"}
           className="which-choice-image"
+          alt=""
         />
         <TileGrid
           heatmap={heatmap}

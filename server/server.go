@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"log"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -132,6 +133,7 @@ func (s *Server) registerRoutes() {
 	}).Methods("GET")
 
 	s.Router.HandleFunc("/api/sessions/create", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("/api/sessions/create")
 		decoder := json.NewDecoder(r.Body)
 		var payload struct {
 			ExperimentId string `json:"experiment_id"`
@@ -144,6 +146,7 @@ func (s *Server) registerRoutes() {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+		log.Println(payload)
 
 		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.ChoiceReward)
 		if err != nil {

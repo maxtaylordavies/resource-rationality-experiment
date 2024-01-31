@@ -73,7 +73,7 @@ const InstructionsPage = (): JSX.Element => {
       if (!sess) {
         sess = await createSession(
           getValueFromUrlOrLocalstorage("expid"),
-          getValueFromUrlOrLocalstorage("userid")
+          getValueFromUrlOrLocalstorage("userid"),
         );
       }
 

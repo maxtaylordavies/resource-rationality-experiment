@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useStore } from "../../store";
 import { NUM_CHOICES } from "../../constants";
+import { Box } from "../../components/Box/Box";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
 import { TopBar } from "../../components/TopBar/TopBar";
 
@@ -11,34 +12,39 @@ const ChoicePage = (): JSX.Element => {
 
   const heatmap = useStore((state) => state.heatmap);
   const choiceCount = useStore((state) => state.choiceCount);
+  const resetChoiceCount = useStore((state) => state.resetChoiceCount);
   const setRandomFocusedTiles = useStore(
-    (state) => state.setRandomFocusedTiles
+    (state) => state.setRandomFocusedTiles,
   );
 
   useEffect(() => {
     setRandomFocusedTiles();
-  }, []);
+  });
 
   useEffect(() => {
     if (choiceCount === NUM_CHOICES) {
-      navigate("/complete");
+      navigate("/main/round-complete");
+      resetChoiceCount();
     }
-  }, [choiceCount]);
+  }, [choiceCount, navigate, resetChoiceCount]);
 
   return (
-    <div className="page">
-      <TopBar numChoices={NUM_CHOICES} phase="Main experiment" />
-      <img
-        src={window.location.origin + "/assets/which-choose.png"}
-        className="which-choose-image"
-      />
-      <TileGrid
-        heatmap={heatmap}
-        dynamic={true}
-        revealValues={false}
-        recordChoices={true}
-      />
-    </div>
+    <Box className="page">
+      <TopBar numChoices={NUM_CHOICES} />
+      <div className="choice-grid-container">
+        <img
+          src={window.location.origin + "/assets/which-plot.png"}
+          className="which-choice-image"
+          alt=""
+        />
+        <TileGrid
+          heatmap={heatmap}
+          dynamic={true}
+          revealValues={false}
+          recordChoices={true}
+        />
+      </div>
+    </Box>
   );
 };
 

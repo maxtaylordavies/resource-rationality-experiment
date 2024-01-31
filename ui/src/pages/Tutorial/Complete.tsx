@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 
+import { useStore } from "../../store";
 import { Box } from "../../components/Box/Box";
 import { LinkButton } from "../../components/Button/LinkButton";
 
 const CompletePage = (): JSX.Element => {
+  const resetScore = useStore((state) => state.resetScore);
+
+  useEffect(() => {
+    resetScore();
+  }, []);
+
   return (
     <Box className="page">
       <div className="tutorial-complete-container">
