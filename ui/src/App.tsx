@@ -7,6 +7,7 @@ import TutorialEvidencePage from "./pages/Tutorial/Evidence";
 import TutorialChoicePage from "./pages/Tutorial/Choice";
 import TutorialCompletePage from "./pages/Tutorial/Complete";
 import MainStartPage from "./pages/Main/Start";
+import MainResolutionPage from "./pages/Main/Resolution";
 import MainEvidencePage from "./pages/Main/Evidence";
 import MainChoicePage from "./pages/Main/Choice";
 import ExperimentCompletePage from "./pages/ExperimentComplete";
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "/main/start",
     element: <MainStartPage />,
+  },
+  {
+    path: "/main/resolution",
+    element: <MainResolutionPage />,
   },
   {
     path: "/main/evidence",

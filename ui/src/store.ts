@@ -48,6 +48,8 @@ export type GlobalState = {
   setHeatmap: (heatmap: Heatmap) => void;
   round: number;
   incrementRound: () => void;
+  resolutionChoice: number;
+  setResolutionChoice: (choice: number) => void;
   score: number;
   incrementScore: (amount: number) => void;
   resetScore: () => void;
@@ -68,6 +70,8 @@ export const useStore = create<GlobalState>((set) => ({
   setHeatmap: (heatmap: Heatmap) => set({ heatmap: heatmap }),
   round: 1,
   incrementRound: () => set((state) => ({ round: state.round + 1 })),
+  resolutionChoice: -1,
+  setResolutionChoice: (choice: number) => set({ resolutionChoice: choice }),
   score: INITIAL_SCORE,
   incrementScore: (amount: number) =>
     set((state) => ({ score: state.score + amount })),

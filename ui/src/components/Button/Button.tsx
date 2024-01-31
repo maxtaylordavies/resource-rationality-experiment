@@ -1,9 +1,9 @@
 import React from "react";
-import { motion, MotionProps } from "framer-motion";
+import { motion, HTMLMotionProps } from "framer-motion";
 
 import "./button.css";
 
-interface Props extends MotionProps {
+interface Props extends HTMLMotionProps<"button"> {
   label: string;
   onClick: () => void;
   variant: "primary" | "secondary";
