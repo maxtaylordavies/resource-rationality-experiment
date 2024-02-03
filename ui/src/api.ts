@@ -9,7 +9,7 @@ const api = axios.create({
 export const createSession = async (
   experimentId: string,
   userId: string,
-  choiceReward = 10
+  choiceReward = 10,
 ): Promise<Session> => {
   const response = await api.post("/sessions/create", {
     experiment_id: experimentId,
@@ -24,14 +24,19 @@ export const getSession = async (sessionId: number): Promise<Session> => {
   return response.data;
 };
 
-export const getHeatmapFromFile = async (id: string): Promise<Heatmap> => {
-  const response = await api.get(`/heatmap/from_file?id=${id}`);
+export const getHeatmapFromFile = async (
+  round: string | number,
+  patchSize: number,
+): Promise<Heatmap> => {
+  const response = await api.get(
+    `/heatmap/from_file?round=${round}&ps=${patchSize}`,
+  );
   return response.data;
 };
 
 export const recordChoiceResult = async (
   sessionId: number,
-  choiceResult: ChoiceResult
+  choiceResult: ChoiceResult,
 ): Promise<void> => {
   await api.post("/choices/record", {
     session_id: sessionId,

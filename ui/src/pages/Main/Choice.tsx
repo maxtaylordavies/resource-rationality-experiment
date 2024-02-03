@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useStore } from "../../store";
 import { NUM_CHOICES } from "../../constants";
+import { getHeatmapFromFile } from "../../api";
 import { Box } from "../../components/Box/Box";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
 import { TopBar } from "../../components/TopBar/TopBar";
@@ -10,16 +11,27 @@ import { TopBar } from "../../components/TopBar/TopBar";
 const ChoicePage = (): JSX.Element => {
   const navigate = useNavigate();
 
-  const heatmap = useStore((state) => state.heatmap);
-  const choiceCount = useStore((state) => state.choiceCount);
-  const resetChoiceCount = useStore((state) => state.resetChoiceCount);
+  const round = useStore((state) => state.round);
+  const [heatmap, setHeatmap] = useStore((state) => [
+    state.heatmap,
+    state.setHeatmap,
+  ]);
+  const [choiceCount, resetChoiceCount] = useStore((state) => [
+    state.choiceCount,
+    state.resetChoiceCount,
+  ]);
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles,
   );
 
   useEffect(() => {
-    setRandomFocusedTiles();
-  });
+    const setup = async () => {
+      const hmap = await getHeatmapFromFile(round, 1);
+      setHeatmap(hmap);
+      setRandomFocusedTiles();
+    };
+    setup();
+  }, []);
 
   useEffect(() => {
     if (choiceCount === NUM_CHOICES) {
@@ -39,6 +51,9 @@ const ChoicePage = (): JSX.Element => {
         />
         <TileGrid
           heatmap={heatmap}
+          tileSize={50}
+          tileMargin={2}
+          tileRadius={5}
           dynamic={true}
           revealValues={false}
           recordChoices={true}

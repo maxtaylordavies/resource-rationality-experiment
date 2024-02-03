@@ -1,26 +1,26 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 import { useStore } from "../../store";
-import { MAP_COSTS } from "../../constants";
+import { PATCH_SIZES, MAP_COSTS } from "../../constants";
 import { Box } from "../../components/Box/Box";
 import { Button } from "../../components/Button/Button";
 import { LinkButton } from "../../components/Button/LinkButton";
 
 const ResolutionPage = (): JSX.Element => {
-  const [resolutionChoice, setResolutionChoice] = useStore((state) => [
-    state.resolutionChoice,
-    state.setResolutionChoice,
+  const [chosenPatchSize, setChosenPatchSize] = useStore((state) => [
+    state.chosenPatchSize,
+    state.setChosenPatchSize,
   ]);
 
   const [hoverIdx, setHoverIdx] = useState<number>(-1);
 
   return (
     <Box className="page">
-      <h1 className="resolution-page-title">Choose map resolution</h1>
+      <h1 className="resolution-page-title">Choose a map to purchase</h1>
       <div className="resolution-page-options">
         {MAP_COSTS.map((cost, idx) => {
-          const selected = resolutionChoice === idx;
+          const selected = chosenPatchSize === PATCH_SIZES[idx];
           return (
             <div
               className={`resolution-page-option${selected ? " selected" : ""}`}
@@ -37,7 +37,7 @@ const ResolutionPage = (): JSX.Element => {
               />
               <Button
                 label={`${cost} points`}
-                onClick={() => setResolutionChoice(idx)}
+                onClick={() => setChosenPatchSize(PATCH_SIZES[idx])}
                 variant="primary"
                 onMouseEnter={() => setHoverIdx(idx)}
                 onMouseLeave={() => setHoverIdx(-1)}
@@ -55,8 +55,8 @@ const ResolutionPage = (): JSX.Element => {
           position: "absolute",
           bottom: 35,
           right: 35,
-          pointerEvents: resolutionChoice === -1 ? "none" : "auto",
-          opacity: resolutionChoice === -1 ? 0.5 : 1.0,
+          pointerEvents: chosenPatchSize === -1 ? "none" : "auto",
+          opacity: chosenPatchSize === -1 ? 0.5 : 1.0,
         }}
       />
     </Box>

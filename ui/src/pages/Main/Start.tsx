@@ -10,7 +10,7 @@ const StartPage = (): JSX.Element => {
         <h1>Main experiment</h1>
         <p>You will now play through the main experiment.</p>
         <LinkButton
-          to="/main/evidence"
+          to="/main/resolution"
           label="Start"
           variant="primary"
           style={{ marginTop: 60 }}

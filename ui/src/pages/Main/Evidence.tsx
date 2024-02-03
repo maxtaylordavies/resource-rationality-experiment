@@ -7,16 +7,20 @@ import { TileGrid } from "../../components/TileGrid/TileGrid";
 import { CountdownLink } from "../../components/CountdownLink/CountdownLink";
 
 const EvidencePage = (): JSX.Element => {
-  const heatmap = useStore((state) => state.heatmap);
-  const setHeatmap = useStore((state) => state.setHeatmap);
+  const [heatmap, setHeatmap] = useStore((state) => [
+    state.heatmap,
+    state.setHeatmap,
+  ]);
+  const round = useStore((state) => state.round);
+  const chosenPatchSize = useStore((state) => state.chosenPatchSize);
 
   useEffect(() => {
     const setup = async () => {
-      const hmap = await getHeatmapFromFile("2");
+      const hmap = await getHeatmapFromFile(round, chosenPatchSize);
       setHeatmap(hmap);
     };
     setup();
-  }, []);
+  }, [round, chosenPatchSize]);
 
   return (
     <Box className="page">
@@ -25,7 +29,13 @@ const EvidencePage = (): JSX.Element => {
           src={window.location.origin + "/assets/key-potato.png"}
           className="evidence-key-image"
         />
-        <TileGrid heatmap={heatmap} dynamic={false} />
+        <TileGrid
+          heatmap={heatmap}
+          dynamic={false}
+          tileSize={50 * chosenPatchSize}
+          tileMargin={2 * chosenPatchSize}
+          tileRadius={5 * chosenPatchSize}
+        />
       </div>
       <CountdownLink
         to="/main/choice"

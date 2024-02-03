@@ -12,7 +12,7 @@ const EvidencePage = (): JSX.Element => {
 
   useEffect(() => {
     const setup = async () => {
-      const hmap = await getHeatmapFromFile("1");
+      const hmap = await getHeatmapFromFile("tutorial", 1);
       setHeatmap(hmap);
     };
     setup();

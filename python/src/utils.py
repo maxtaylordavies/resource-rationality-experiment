@@ -17,6 +17,17 @@ def avg_pool_1d(x: jnp.ndarray, pool_size: int) -> jnp.ndarray:
     return to_range(jnp.repeat(tmp, pool_size), jnp.min(x), jnp.max(x))
 
 
+def avg_pool_2d(x: jnp.ndarray, pool_size: int) -> jnp.ndarray:
+    if pool_size == 1:
+        return x
+
+    r, c = x.shape
+    r, c = r // pool_size, c // pool_size
+    tmp = jnp.mean(x.reshape(r, pool_size, c, pool_size), axis=(1, 3))
+    return tmp
+    # return jnp.repeat(jnp.repeat(tmp, pool_size, axis=0), pool_size, axis=1)
+
+
 def aggregated_covariance_matrix(K, patch_size):
     # K is a covariance matrix of shape (n_options, n_options)
     # for a 1D GP with RBF kernel. we want to compute the covariance

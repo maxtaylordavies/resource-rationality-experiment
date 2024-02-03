@@ -97,13 +97,14 @@ func (s *Server) registerRoutes() {
 	}).Methods("GET")
 
 	s.Router.HandleFunc("/api/heatmap/from_file", func(w http.ResponseWriter, r *http.Request) {
-		id := r.URL.Query().Get("id")
-		if id == "" {
-			http.Error(w, "missing id", http.StatusBadRequest)
+		round := r.URL.Query().Get("round")
+		ps := r.URL.Query().Get("ps")
+		if round == "" || ps == "" {
+			http.Error(w, "missing round or ps", http.StatusBadRequest)
 			return
 		}
 
-		http.ServeFile(w, r, "heatmaps/"+id+".txt")
+		http.ServeFile(w, r, "heatmaps/" + round + "/" + ps + ".txt")
 	}).Methods("GET")
 
 	s.Router.HandleFunc("/api/sessions/all", func(w http.ResponseWriter, r *http.Request) {

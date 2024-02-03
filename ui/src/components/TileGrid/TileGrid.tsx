@@ -71,7 +71,9 @@ export const TileGrid = ({
   };
 
   const onTileClick = async (row: number, col: number) => {
-    if (!dynamic || session === null) return;
+    if (!dynamic || session === null) {
+      return;
+    }
 
     const selected = focusedTiles.findIndex(
       (tile) => tile.row === row && tile.col === col,
