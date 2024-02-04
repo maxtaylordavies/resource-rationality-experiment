@@ -10,6 +10,11 @@ def to_range(x: jnp.ndarray, min_val: float, max_val: float) -> jnp.ndarray:
     return (max_val - min_val) * x + min_val
 
 
+def digitize(x: jnp.ndarray, num_bins: int) -> jnp.ndarray:
+    bins = jnp.linspace(0, 1, num_bins + 1)[1:-1]
+    return jnp.digitize(to_range(x, 0, 1), bins)
+
+
 def avg_pool_1d(x: jnp.ndarray, pool_size: int) -> jnp.ndarray:
     if pool_size == 1:
         return x

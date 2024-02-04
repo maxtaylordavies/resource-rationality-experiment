@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useStore } from "../../store";
@@ -12,21 +12,19 @@ const ChoicePage = (): JSX.Element => {
 
   const heatmap = useStore((state) => state.heatmap);
   const choiceCount = useStore((state) => state.choiceCount);
-  const resetChoiceCount = useStore((state) => state.resetChoiceCount);
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles,
   );
 
   useEffect(() => {
     setRandomFocusedTiles();
-  });
+  }, []);
 
   useEffect(() => {
     if (choiceCount === NUM_CHOICES) {
       navigate("/tutorial/complete");
-      resetChoiceCount();
     }
-  }, [choiceCount, navigate, resetChoiceCount]);
+  }, [choiceCount, navigate]);
 
   return (
     <Box className="page">

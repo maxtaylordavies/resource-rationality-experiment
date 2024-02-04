@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 
 import { Box } from "../components/Box/Box";
 import { Button } from "../components/Button/Button";
-import { Session, useStore } from "../store";
-import { getSession, createSession } from "../api";
-import { getValueFromUrlOrLocalstorage, writeToLocalStorage } from "../utils";
+// import { Session, useStore } from "../store";
+// import { getSession, createSession } from "../api";
+// import { getValueFromUrlOrLocalstorage, writeToLocalStorage } from "../utils";
 
 type ContentItem = {
   text: string;
@@ -56,33 +55,33 @@ const content: ContentItem[][] = [
 
 const InstructionsPage = (): JSX.Element => {
   const navigate = useNavigate();
-  const setSession = useStore((state) => state.setSession);
+  // const setSession = useStore((state) => state.setSession);
   const [page, setPage] = useState(0);
 
-  useEffect(() => {
-    const setup = async () => {
-      let sess;
+  // useEffect(() => {
+  //   const setup = async () => {
+  //     let sess;
 
-      // check for existing session
-      const sid = getValueFromUrlOrLocalstorage("sessionid");
-      if (sid) {
-        sess = await getSession(sid);
-      }
+  //     // check for existing session
+  //     const sid = getValueFromUrlOrLocalstorage("sessionid");
+  //     if (sid) {
+  //       sess = await getSession(sid);
+  //     }
 
-      // create new session if none exists
-      if (!sess) {
-        sess = await createSession(
-          getValueFromUrlOrLocalstorage("expid"),
-          getValueFromUrlOrLocalstorage("userid"),
-        );
-      }
+  //     // create new session if none exists
+  //     if (!sess) {
+  //       sess = await createSession(
+  //         getValueFromUrlOrLocalstorage("expid"),
+  //         getValueFromUrlOrLocalstorage("userid"),
+  //       );
+  //     }
 
-      // save session id to localstorage and save session to global store
-      writeToLocalStorage("sessionid", sess.id);
-      setSession(sess);
-    };
-    setup();
-  }, []);
+  //     // save session id to localstorage and save session to global store
+  //     writeToLocalStorage("sessionid", sess.id);
+  //     setSession(sess);
+  //   };
+  //   setup();
+  // }, []);
 
   const onNextClick = () => {
     if (page < content.length - 1) {

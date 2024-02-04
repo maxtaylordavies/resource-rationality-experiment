@@ -1,9 +1,16 @@
-import React from "react";
+import { useEffect } from "react";
 
+import { useStore } from "../../store";
 import { Box } from "../../components/Box/Box";
 import { LinkButton } from "../../components/Button/LinkButton";
 
 const StartPage = (): JSX.Element => {
+  const incrementRound = useStore((state) => state.incrementRound);
+
+  useEffect(() => {
+    incrementRound();
+  }, []);
+
   return (
     <Box className="page">
       <div className="tutorial-start-container">

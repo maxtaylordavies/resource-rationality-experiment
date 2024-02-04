@@ -58,9 +58,6 @@ export type GlobalState = {
   setRandomFocusedTiles: () => void;
   choiceCount: number;
   incrementChoiceCount: () => void;
-  resetChoiceCount: () => void;
-  // choiceHistory: ChoiceResult[];
-  // recordChoice: (result: ChoiceResult) => void;
 };
 
 export const useStore = create<GlobalState>((set) => ({
@@ -68,8 +65,13 @@ export const useStore = create<GlobalState>((set) => ({
   setSession: (session: Session) => set({ session: session }),
   heatmap: [],
   setHeatmap: (heatmap: Heatmap) => set({ heatmap: heatmap }),
-  round: 1,
-  incrementRound: () => set((state) => ({ round: state.round + 1 })),
+  round: 0,
+  incrementRound: () =>
+    set((state) => ({
+      round: state.round + 1,
+      choiceCount: 0,
+      chosenPatchSize: -1,
+    })),
   chosenPatchSize: -1,
   setChosenPatchSize: (ps: number) => set({ chosenPatchSize: ps }),
   score: INITIAL_SCORE,
@@ -85,8 +87,4 @@ export const useStore = create<GlobalState>((set) => ({
   choiceCount: 0,
   incrementChoiceCount: () =>
     set((state) => ({ choiceCount: state.choiceCount + 1 })),
-  resetChoiceCount: () => set({ choiceCount: 0 }),
-  // choiceHistory: [],
-  // recordChoice: (result: ChoiceResult) =>
-  //   set((state) => ({ choiceHistory: [...state.choiceHistory, result] })),
 }));
