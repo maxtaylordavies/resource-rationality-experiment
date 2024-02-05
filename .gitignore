@@ -11,8 +11,11 @@ ui/.pnp.js
 # production
 ui/build
 ui/dist
-
 server/server
+
+# python
+**/__pycache__
+**/*.pyc
 
 # misc
 .DS_Store
@@ -26,3 +29,4 @@ yarn-debug.log*
 yarn-error.log*
 
 store.db
+figures/

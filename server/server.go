@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"log"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -96,13 +97,14 @@ func (s *Server) registerRoutes() {
 	}).Methods("GET")
 
 	s.Router.HandleFunc("/api/heatmap/from_file", func(w http.ResponseWriter, r *http.Request) {
-		id := r.URL.Query().Get("id")
-		if id == "" {
-			http.Error(w, "missing id", http.StatusBadRequest)
+		round := r.URL.Query().Get("round")
+		ps := r.URL.Query().Get("ps")
+		if round == "" || ps == "" {
+			http.Error(w, "missing round or ps", http.StatusBadRequest)
 			return
 		}
 
-		http.ServeFile(w, r, "heatmaps/"+id+".txt")
+		http.ServeFile(w, r, "heatmaps/" + round + "/" + ps + ".txt")
 	}).Methods("GET")
 
 	s.Router.HandleFunc("/api/sessions/all", func(w http.ResponseWriter, r *http.Request) {
@@ -115,11 +117,29 @@ func (s *Server) registerRoutes() {
 		respond(w, sessions)
 	}).Methods("GET")
 
+	s.Router.HandleFunc("/api/sessions/get", func(w http.ResponseWriter, r *http.Request) {
+		idStr := r.URL.Query().Get("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		session, err := s.Store.GetSession(id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		respond(w, session)
+	}).Methods("GET")
+
 	s.Router.HandleFunc("/api/sessions/create", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("/api/sessions/create")
 		decoder := json.NewDecoder(r.Body)
 		var payload struct {
 			ExperimentId string `json:"experiment_id"`
 			UserId       string `json:"user_id"`
+			ChoiceReward int    `json:"choice_reward"`
 		}
 
 		err := decoder.Decode(&payload)
@@ -127,8 +147,9 @@ func (s *Server) registerRoutes() {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+		log.Println(payload)
 
-		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId)
+		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.ChoiceReward)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

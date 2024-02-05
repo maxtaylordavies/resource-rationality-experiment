@@ -1,44 +1,97 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { useStore } from "./store";
-import { NUM_CHOICES } from "./constants";
-import Instructions from "./pages/Instructions";
-import EvidenceTraining from "./pages/EvidenceTraining";
-import TestTraining from "./pages/TestTraining";
-import EvidenceActual from "./pages/EvidenceActual";
-import TestActual from "./pages/TestActual";
-import ExperimentComplete from "./pages/ExperimentComplete";
+import { Session, useStore } from "./store";
+import { getSession, createSession } from "./api";
+import { getValueFromUrlOrLocalstorage, writeToLocalStorage } from "./utils";
+import InstructionsPage from "./pages/Instructions";
+import TutorialStartPage from "./pages/Tutorial/Start";
+import TutorialEvidencePage from "./pages/Tutorial/Evidence";
+import TutorialChoicePage from "./pages/Tutorial/Choice";
+import TutorialCompletePage from "./pages/Tutorial/Complete";
+import MainStartPage from "./pages/Main/Start";
+import MainResolutionPage from "./pages/Main/Resolution";
+import MainEvidencePage from "./pages/Main/Evidence";
+import MainChoicePage from "./pages/Main/Choice";
+import MainRoundCompletePage from "./pages/Main/RoundComplete";
+import ExperimentCompletePage from "./pages/ExperimentComplete";
 import "./App.css";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Instructions />,
+    element: <InstructionsPage />,
   },
   {
-    path: "/evidence1",
-    element: <EvidenceTraining />,
+    path: "/tutorial/start",
+    element: <TutorialStartPage />,
   },
   {
-    path: "/test1",
-    element: <TestTraining />,
+    path: "/tutorial/evidence",
+    element: <TutorialEvidencePage />,
   },
   {
-    path: "/evidence2",
-    element: <EvidenceActual />,
+    path: "/tutorial/choice",
+    element: <TutorialChoicePage />,
   },
   {
-    path: "/test2",
-    element: <TestActual />,
+    path: "/tutorial/complete",
+    element: <TutorialCompletePage />,
+  },
+  {
+    path: "/main/start",
+    element: <MainStartPage />,
+  },
+  {
+    path: "/main/resolution",
+    element: <MainResolutionPage />,
+  },
+  {
+    path: "/main/evidence",
+    element: <MainEvidencePage />,
+  },
+  {
+    path: "/main/choice",
+    element: <MainChoicePage />,
+  },
+  {
+    path: "/main/round-complete",
+    element: <MainRoundCompletePage />,
   },
   {
     path: "/complete",
-    element: <ExperimentComplete />,
+    element: <ExperimentCompletePage />,
   },
 ]);
 
 const App = () => {
+  const setSession = useStore((state) => state.setSession);
+
+  useEffect(() => {
+    const setup = async () => {
+      let sess;
+
+      // check for existing session
+      const sid = getValueFromUrlOrLocalstorage("sessionid");
+      if (sid) {
+        sess = (await getSession(sid)) as Session;
+      }
+
+      // create new session if none exists
+      if (!sess) {
+        sess = (await createSession(
+          getValueFromUrlOrLocalstorage("expid"),
+          getValueFromUrlOrLocalstorage("userid"),
+        )) as Session;
+      }
+
+      // save session id to localstorage and save session to global store
+      writeToLocalStorage("sessionid", sess.id);
+      setSession(sess);
+    };
+    setup();
+  }, []);
+
   return (
     <div className="App">
       <RouterProvider router={router} />

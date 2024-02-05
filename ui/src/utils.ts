@@ -1,14 +1,17 @@
+const PREFIX = "_rre_";
+
 export const getValueFromUrlOrLocalstorage = (key: string) => {
   const params = new URLSearchParams(window.location.search);
   return (
-    params.get(key) || JSON.parse(localStorage.getItem(`_rre_${key}`) || "null")
+    params.get(key) ||
+    JSON.parse(localStorage.getItem(`${PREFIX}${key}`) || "null")
   );
 };
 
 export const writeToLocalStorage = (key: string, val: any) => {
-  localStorage.setItem(`_rre_${key}`, JSON.stringify(val));
+  localStorage.setItem(`${PREFIX}${key}`, JSON.stringify(val));
 };
 
 export const removeFromLocalStorage = (key: string) => {
-  localStorage.removeItem(`_rre_${key}`);
+  localStorage.removeItem(`${PREFIX}${key}`);
 };

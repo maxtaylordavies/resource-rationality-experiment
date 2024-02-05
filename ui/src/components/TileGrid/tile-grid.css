@@ -3,15 +3,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .tile-grid-row {
   display: flex;
   flex-direction: row;
-}
-
-.tile-grid-tile {
-  border-radius: 10px;
-  margin: 3px;
 }
