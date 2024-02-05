@@ -28,7 +28,7 @@ const ChoicePage = (): JSX.Element => {
 
   return (
     <Box className="page">
-      <TopBar numChoices={NUM_CHOICES} />
+      <TopBar />
       <div className="choice-grid-container">
         <img
           src={window.location.origin + "/assets/which-plot.png"}

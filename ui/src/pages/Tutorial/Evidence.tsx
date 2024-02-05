@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useStore } from "../../store";
 import { getHeatmapFromFile } from "../../api";
 import { Box } from "../../components/Box/Box";
+import { TopBar } from "../../components/TopBar/TopBar";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
 import { CountdownLink } from "../../components/CountdownLink/CountdownLink";
 
@@ -20,6 +21,7 @@ const EvidencePage = (): JSX.Element => {
 
   return (
     <Box className="page">
+      <TopBar />
       <div className="evidence-grid-container">
         <img
           src={window.location.origin + "/assets/key-potato.png"}

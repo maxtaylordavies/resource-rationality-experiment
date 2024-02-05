@@ -1,14 +1,10 @@
 import React from "react";
 
-import { NUM_ROUNDS } from "../../constants";
+import { NUM_ROUNDS, NUM_CHOICES } from "../../constants";
 import { useStore } from "../../store";
 import "./top-bar.css";
 
-type Props = {
-  numChoices: number;
-};
-
-export const TopBar = ({ numChoices }: Props): JSX.Element => {
+export const TopBar = (): JSX.Element => {
   const round = useStore((state) => state.round);
   const choiceCount = useStore((state) => state.choiceCount);
   const score = useStore((state) => state.score);
@@ -25,7 +21,7 @@ export const TopBar = ({ numChoices }: Props): JSX.Element => {
       </div>
       <div className="choice-count-box">
         <span className="choice-count">
-          {choiceCount}/{numChoices}
+          {choiceCount}/{NUM_CHOICES}
         </span>
         <span>pairs done</span>
       </div>
