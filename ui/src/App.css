@@ -11,20 +11,12 @@
 .page {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 /* INSTRUCTIONS PAGES */
 .instructions-page {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
     padding-left: 240px;
 }
 
@@ -36,16 +28,11 @@
 }
 
 .instructions-page .box {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     background-color: rgba(255, 168, 0, 0.1);
     width: 680px;
     height: 140px;
     padding: 0 20px;
     border-radius: 20px;
-    text-align: left;
     font-size: 30px;
     font-weight: 500;
     line-height: 32px;
@@ -66,10 +53,6 @@
 
 /* TUTORIAL INTRO PAGE */
 .tutorial-start-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
     text-align: left;
     padding: 30px;
     background-color: rgba(0, 255, 0, 0.1);
@@ -142,11 +125,28 @@
     right: 35px;
 }
 
-.evidence-grid-container {
+.grids-container {
+    position: relative;
     margin-top: 30px;
+}
+
+.map-container {
+    width: 230px;
+    position: absolute;
+    left: -245px;
+    margin-right: 15px;
     background-color: rgba(255, 0, 0, 0.05);
-    padding: 30px;
+    padding: 15px;
     border-radius: 20px;
+}
+
+.map-container h1 {
+    width: 100%;
+    font-size: 28px;
+    font-weight: 600;
+    color: #424242;
+    margin-top: 0;
+    margin-bottom: 5px;
 }
 
 .evidence-key-image {
@@ -155,7 +155,6 @@
 }
 
 .choice-grid-container {
-    margin-top: 30px;
     background-color: rgba(0, 0, 255, 0.05);
     padding: 30px;
     border-radius: 20px;

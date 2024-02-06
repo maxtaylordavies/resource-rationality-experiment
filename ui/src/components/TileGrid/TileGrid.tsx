@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 import { COLORS } from "../../constants";
@@ -26,7 +26,6 @@ export const TileGrid = ({
   tileRadius = 10,
 }: TileGridProps) => {
   const session = useStore((state) => state.session);
-  // const heatmap = useStore((state) => state.heatmap);
   const focusedTiles = useStore((state) => state.focusedTiles);
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles,
@@ -137,7 +136,7 @@ export const TileGrid = ({
       })}
     </div>
   ) : (
-    <div />
+    <div>uh oh</div>
   );
 };
 

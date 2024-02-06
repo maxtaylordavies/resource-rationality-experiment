@@ -26,7 +26,7 @@ const EvidencePage = (): JSX.Element => {
   return (
     <Box className="page">
       <TopBar />
-      <div className="evidence-grid-container">
+      <div className="map-container">
         <img
           src={window.location.origin + "/assets/key-potato.png"}
           className="evidence-key-image"

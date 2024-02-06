@@ -1,12 +1,14 @@
-import React from "react";
-
 import { Box } from "../../components/Box/Box";
 import { LinkButton } from "../../components/Button/LinkButton";
 
 const StartPage = (): JSX.Element => {
   return (
     <Box className="page">
-      <div className="tutorial-start-container">
+      <Box
+        justify="flex-start"
+        align="flex-start"
+        className="tutorial-start-container"
+      >
         <h1>Tutorial</h1>
         <p>
           You will now play through a tutorial round, in order to familiarise
@@ -21,12 +23,12 @@ const StartPage = (): JSX.Element => {
           earned will not contribute to your final score.
         </p>
         <LinkButton
-          to="/tutorial/evidence"
+          to="/tutorial/choice"
           label="Start tutorial"
           variant="primary"
           style={{ marginTop: 60 }}
         />
-      </div>
+      </Box>
     </Box>
   );
 };

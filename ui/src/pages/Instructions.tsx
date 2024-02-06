@@ -63,10 +63,15 @@ const InstructionsPage = (): JSX.Element => {
   };
 
   return (
-    <Box className="instructions-page">
+    <Box align="flex-start" className="instructions-page">
       <h1>Instructions</h1>
       {content[page].map((item) => (
-        <Box key={item.text} className="box">
+        <Box
+          key={item.text}
+          direction="row"
+          justify="space-between"
+          className="box"
+        >
           <span>{item.text}</span>
           <img src={window.location.origin + "/assets/" + item.imgUrl} />
         </Box>

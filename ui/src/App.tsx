@@ -6,7 +6,6 @@ import { getSession, createSession } from "./api";
 import { getValueFromUrlOrLocalstorage, writeToLocalStorage } from "./utils";
 import InstructionsPage from "./pages/Instructions";
 import TutorialStartPage from "./pages/Tutorial/Start";
-import TutorialEvidencePage from "./pages/Tutorial/Evidence";
 import TutorialChoicePage from "./pages/Tutorial/Choice";
 import TutorialCompletePage from "./pages/Tutorial/Complete";
 import MainStartPage from "./pages/Main/Start";
@@ -25,10 +24,6 @@ const router = createBrowserRouter([
   {
     path: "/tutorial/start",
     element: <TutorialStartPage />,
-  },
-  {
-    path: "/tutorial/evidence",
-    element: <TutorialEvidencePage />,
   },
   {
     path: "/tutorial/choice",
