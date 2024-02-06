@@ -1,7 +1,6 @@
-import React from "react";
-
 import { NUM_ROUNDS, NUM_CHOICES } from "../../constants";
 import { useStore } from "../../store";
+import { Coin } from "../Coin/Coin";
 import "./top-bar.css";
 
 export const TopBar = (): JSX.Element => {
@@ -17,7 +16,8 @@ export const TopBar = (): JSX.Element => {
     <div className="top-bar">
       <div className="round-text">{roundText}</div>
       <div className="score-box">
-        <span className="score-box-score">{score}</span> points
+        <span className="score-box-score">{score}</span>
+        <Coin height={28} />
       </div>
       <div className="choice-count-box">
         <span className="choice-count">

@@ -51,10 +51,6 @@ const ChoicePage = (): JSX.Element => {
         ) : (
           <>
             <Box className="map-container">
-              {/* <img
-            src={window.location.origin + "/assets/key-potato.png"}
-            className="evidence-key-image"
-          /> */}
               <h1>Map</h1>
               <TileGrid
                 heatmap={ehm}

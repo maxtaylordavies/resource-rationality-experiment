@@ -7,6 +7,7 @@ import { Box } from "../../components/Box/Box";
 import { TopBar } from "../../components/TopBar/TopBar";
 import { Button } from "../../components/Button/Button";
 import { LinkButton } from "../../components/Button/LinkButton";
+import { Coin } from "../../components/Coin/Coin";
 
 const ResolutionPage = (): JSX.Element => {
   const [chosenPatchSize, setChosenPatchSize] = useStore((state) => [
@@ -29,6 +30,7 @@ const ResolutionPage = (): JSX.Element => {
               key={idx}
             >
               <motion.img
+                className="resolution-page-option-image"
                 src={`${window.location.origin}/assets/resolution-${idx}.png`}
                 alt=""
                 initial={{ opacity: 0.15, scale: 1.0 }}
@@ -38,13 +40,15 @@ const ResolutionPage = (): JSX.Element => {
                 }}
               />
               <Button
-                label={`${cost} points`}
+                label=""
                 onClick={() => setChosenPatchSize(PATCH_SIZES[idx])}
                 variant="primary"
                 onMouseEnter={() => setHoverIdx(idx)}
                 onMouseLeave={() => setHoverIdx(-1)}
                 animate={{ scale: selected ? 1.05 : 1.0 }}
-              />
+              >
+                {cost} <Coin height={28} style={{ marginLeft: 5 }} />
+              </Button>
             </div>
           );
         })}
