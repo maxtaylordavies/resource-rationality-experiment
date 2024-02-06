@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useStore } from "../../store";
-import { NUM_ROUNDS, NUM_CHOICES } from "../../constants";
+import { NUM_ROUNDS, NUM_CHOICES, VEGETABLES } from "../../constants";
 import { getHeatmapFromFile } from "../../api";
 import { Box } from "../../components/Box/Box";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
@@ -50,11 +50,18 @@ const ChoicePage = (): JSX.Element => {
       <TopBar />
       <Box direction="row" align="flex-start" className="grids-container">
         {loading ? (
-          <span>Loading...</span>
+          <span className="loading-text">Loading...</span>
         ) : (
           <>
             <Box className="map-container">
-              <h1>Map</h1>
+              <Box
+                direction="row"
+                justify="space-between"
+                className="map-title"
+              >
+                <span>Map</span>
+                {VEGETABLES[round - 1]}
+              </Box>
               <TileGrid
                 heatmap={ehm}
                 dynamic={false}

@@ -55,7 +55,6 @@ export type GlobalState = {
   chosenPatchSize: number;
   setChosenPatchSize: (ps: number) => void;
   score: number;
-  setScore: (score: number) => void;
   incrementScore: (amount: number) => void;
   resetScore: () => void;
   focusedTiles: Pos[];
@@ -85,7 +84,6 @@ export const useStore = create<GlobalState>((set) => ({
   chosenPatchSize: -1,
   setChosenPatchSize: (ps: number) => set({ chosenPatchSize: ps }),
   score: INITIAL_SCORE,
-  setScore: (score: number) => set({ score: score }),
   incrementScore: (amount: number) =>
     set((state) => ({ score: state.score + amount })),
   resetScore: () => set({ score: INITIAL_SCORE }),

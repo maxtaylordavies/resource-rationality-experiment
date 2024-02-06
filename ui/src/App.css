@@ -52,21 +52,21 @@
 }
 
 /* TUTORIAL INTRO PAGE */
-.tutorial-start-container {
+.phase-start-container {
     text-align: left;
     padding: 30px;
     background-color: rgba(0, 255, 0, 0.1);
     border-radius: 20px;
 }
 
-.tutorial-start-container h1 {
+.phase-start-container h1 {
     font-size: 40px;
     line-height: 40px;
     font-weight: 800;
     margin: 0;
 }
 
-.tutorial-start-container p {
+.phase-start-container p {
     width: 550px;
     font-size: 30px;
     line-height: 32px;
@@ -81,7 +81,7 @@
     font-size: 40px;
     font-weight: 800;
     letter-spacing: -2%;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .resolution-page-options {
@@ -130,7 +130,7 @@
     margin-top: 30px;
 }
 
-.grids-container span {
+.loading-text {
     font-size: 50px;
 }
 
@@ -144,7 +144,7 @@
     border-radius: 20px;
 }
 
-.map-container h1 {
+.map-container .map-title {
     width: 100%;
     font-size: 28px;
     line-height: 28px;

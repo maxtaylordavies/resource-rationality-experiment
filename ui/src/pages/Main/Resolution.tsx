@@ -14,14 +14,12 @@ const ResolutionPage = (): JSX.Element => {
     state.chosenPatchSize,
     state.setChosenPatchSize,
   ]);
-  const [score, setScore] = useStore((state) => [state.score, state.setScore]);
+  const incrementScore = useStore((state) => state.incrementScore);
 
-  const [prevScore, setPrevScore] = useState<number>(score);
   const [hoverIdx, setHoverIdx] = useState<number>(-1);
 
   const handleClick = (idx: number) => {
     setChosenPatchSize(PATCH_SIZES[idx]);
-    setScore(prevScore - MAP_COSTS[idx]);
   };
 
   return (
@@ -61,6 +59,7 @@ const ResolutionPage = (): JSX.Element => {
         })}
       </div>
       <LinkButton
+        onClick={() => incrementScore(-MAP_COSTS[chosenPatchSize])}
         label="Confirm"
         to="/main/choice"
         variant="primary"

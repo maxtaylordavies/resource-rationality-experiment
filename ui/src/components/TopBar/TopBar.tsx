@@ -1,4 +1,4 @@
-import { NUM_ROUNDS, NUM_CHOICES } from "../../constants";
+import { NUM_ROUNDS, NUM_CHOICES, VEGETABLES } from "../../constants";
 import { useStore } from "../../store";
 import { Coin } from "../Coin/Coin";
 import "./top-bar.css";
@@ -10,7 +10,7 @@ export const TopBar = (): JSX.Element => {
 
   const roundText = window.location.pathname.includes("tutorial")
     ? "Tutorial"
-    : `Round ${round} of ${NUM_ROUNDS}`;
+    : `Round ${round} of ${NUM_ROUNDS} ${VEGETABLES[round - 1]}`;
 
   return (
     <div className="top-bar">

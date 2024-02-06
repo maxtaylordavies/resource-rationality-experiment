@@ -7,7 +7,7 @@ const StartPage = (): JSX.Element => {
       <Box
         justify="flex-start"
         align="flex-start"
-        className="tutorial-start-container"
+        className="phase-start-container"
       >
         <h1>Tutorial</h1>
         <p>
