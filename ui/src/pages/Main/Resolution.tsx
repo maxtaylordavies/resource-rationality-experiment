@@ -51,7 +51,7 @@ const ResolutionPage = (): JSX.Element => {
       </div>
       <LinkButton
         label="Confirm"
-        to="/main/evidence"
+        to="/main/choice"
         variant="primary"
         style={{
           position: "absolute",

@@ -10,7 +10,6 @@ import { TopBar } from "../../components/TopBar/TopBar";
 
 const ChoicePage = (): JSX.Element => {
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(true);
 
   const [ehm, setEhm] = useStore((state) => [
@@ -29,7 +28,6 @@ const ChoicePage = (): JSX.Element => {
   useEffect(() => {
     const setup = async () => {
       const hmap = await getHeatmapFromFile("tutorial", 1);
-      console.log("hmap", hmap);
       setEhm(hmap);
       setThm(hmap);
       setRandomFocusedTiles();
@@ -48,36 +46,42 @@ const ChoicePage = (): JSX.Element => {
     <Box className="page">
       <TopBar />
       <Box direction="row" align="flex-start" className="grids-container">
-        <Box className="map-container">
-          {/* <img
+        {loading ? (
+          <span>Loading...</span>
+        ) : (
+          <>
+            <Box className="map-container">
+              {/* <img
             src={window.location.origin + "/assets/key-potato.png"}
             className="evidence-key-image"
           /> */}
-          <h1>Map</h1>
-          <TileGrid
-            heatmap={ehm}
-            dynamic={false}
-            tileSize={60}
-            tileMargin={3}
-            tileRadius={10}
-          />
-        </Box>
-        <Box className="choice-grid-container">
-          <img
-            src={window.location.origin + "/assets/which-plot.png"}
-            className="which-choice-image"
-            alt=""
-          />
-          <TileGrid
-            heatmap={thm}
-            dynamic={true}
-            revealValues={true}
-            recordChoices={false}
-            tileSize={130}
-            tileMargin={5}
-            tileRadius={20}
-          />
-        </Box>
+              <h1>Map</h1>
+              <TileGrid
+                heatmap={ehm}
+                dynamic={false}
+                tileSize={200 / 3}
+                tileMargin={0}
+                tileRadius={0}
+              />
+            </Box>
+            <Box className="choice-grid-container">
+              <img
+                src={window.location.origin + "/assets/which-plot.png"}
+                className="which-choice-image"
+                alt=""
+              />
+              <TileGrid
+                heatmap={thm}
+                dynamic={true}
+                revealValues={true}
+                recordChoices={false}
+                tileSize={130}
+                tileMargin={5}
+                tileRadius={20}
+              />
+            </Box>
+          </>
+        )}
       </Box>
     </Box>
   );
