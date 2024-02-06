@@ -16,7 +16,7 @@ const content: ContentItem[][] = [
       imgUrl: "farmer.png",
     },
     {
-      text: "The farmer has a field. The field is divided equally into a grid of 64 square plots.",
+      text: "The farmer has a field. The field is divided equally into a grid of square plots.",
       imgUrl: "grid.png",
     },
   ],
@@ -26,26 +26,28 @@ const content: ContentItem[][] = [
       imgUrl: "vegetables.png",
     },
     {
-      text: "Depending on the type of crop, different plots are more or less suitable for planting.",
-      imgUrl: "grid-tick-cross.png",
-    },
-    {
-      text: "In particular, plots are divided into four levels of quality, indicated by red, orange, yellow and green.",
-      imgUrl: "colours.png",
+      text: "You will be shown pairs of plots in the field. For each pair, choose which plot the farmer should plant in.",
+      imgUrl: "two-plots.png",
     },
   ],
   [
     {
-      text: "You will be shown pairs of plots in the field. For each pair, choose which plot the farmer should plant in.",
-      imgUrl: "two-plots.png",
+      text: "Depending on the type of crop, different plots are more or less suitable for planting.",
+      imgUrl: "grid-tick-cross.png",
     },
     {
-      text: "The farmer will reward you with points for correct choices. Incorrect choices will earn no points.",
-      imgUrl: "moneybag.png",
-    },
-    {
-      text: "You will get to see a map of the plot colours before each round, but not while you make choices.",
+      text: "You will have a map showing how suitable different plots are. Green plots are the best, red are the worst.",
       imgUrl: "colour-grid.png",
+    },
+  ],
+  [
+    {
+      text: "You will earn coins for each correct choice, and lose coins for each incorrect choice.",
+      imgUrl: "coin.png",
+    },
+    {
+      text: "Your goal is to earn as many coins as possible. If you earn enough coins, you will receive a bonus payment!",
+      imgUrl: "moneybag.png",
     },
   ],
 ];
@@ -73,7 +75,10 @@ const InstructionsPage = (): JSX.Element => {
           className="box"
         >
           <span>{item.text}</span>
-          <img src={window.location.origin + "/assets/" + item.imgUrl} />
+          <img
+            src={window.location.origin + "/assets/" + item.imgUrl}
+            alt={item.imgUrl}
+          />
         </Box>
       ))}
       <div className="button-container">

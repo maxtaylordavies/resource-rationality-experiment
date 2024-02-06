@@ -16,11 +16,11 @@ const StartPage = (): JSX.Element => {
         </p>
         <p>
           To makes things easier, the tutorial round uses a smaller field with
-          only 9 plots (instead of 64).
+          only 9 plots (in the main game there will be 64).
         </p>
         <p>
-          You can replay the tutorial round as many times as you want. Points
-          earned will not contribute to your final score.
+          You can replay the tutorial round as many times as you want. Coins
+          earned or lost will not contribute to your final score.
         </p>
         <LinkButton
           to="/tutorial/choice"

@@ -79,8 +79,9 @@ export const TileGrid = ({
     );
     const values = focusedTiles.map((tile) => heatmap[tile.row][tile.col]);
     if (values[selected] === Math.max(...values)) {
-      console.log(`incrementing score by ${session.choice_reward}`);
       incrementScore(session.choice_reward);
+    } else {
+      incrementScore(-session.choice_reward);
     }
 
     if (recordChoices) {
@@ -169,7 +170,7 @@ const Tile = ({
       animate={{
         opacity: type === "unfocused" ? 0.5 : 1.0,
       }}
-      whileHover={{ scale: type === "focused" ? 1.1 : 1.0 }}
+      whileHover={{ scale: type === "focused" ? 1.07 : 1.0 }}
       style={{
         backgroundColor: color,
         pointerEvents: type === "focused" ? "auto" : "none",

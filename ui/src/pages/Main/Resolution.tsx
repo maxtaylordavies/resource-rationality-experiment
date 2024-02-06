@@ -14,8 +14,15 @@ const ResolutionPage = (): JSX.Element => {
     state.chosenPatchSize,
     state.setChosenPatchSize,
   ]);
+  const [score, setScore] = useStore((state) => [state.score, state.setScore]);
 
+  const [prevScore, setPrevScore] = useState<number>(score);
   const [hoverIdx, setHoverIdx] = useState<number>(-1);
+
+  const handleClick = (idx: number) => {
+    setChosenPatchSize(PATCH_SIZES[idx]);
+    setScore(prevScore - MAP_COSTS[idx]);
+  };
 
   return (
     <Box className="page">
@@ -41,7 +48,7 @@ const ResolutionPage = (): JSX.Element => {
               />
               <Button
                 label=""
-                onClick={() => setChosenPatchSize(PATCH_SIZES[idx])}
+                onClick={() => handleClick(idx)}
                 variant="primary"
                 onMouseEnter={() => setHoverIdx(idx)}
                 onMouseLeave={() => setHoverIdx(-1)}
