@@ -51,7 +51,14 @@ const ChoicePage = (): JSX.Element => {
         ) : (
           <>
             <Box className="map-container">
-              <h1>Map</h1>
+              <Box
+                direction="row"
+                justify="space-between"
+                className="map-title"
+              >
+                <span>Map</span>
+                {""}
+              </Box>
               <TileGrid
                 heatmap={ehm}
                 dynamic={false}

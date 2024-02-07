@@ -10,17 +10,11 @@ import { LinkButton } from "../../components/Button/LinkButton";
 import { Coin } from "../../components/Coin/Coin";
 
 const ResolutionPage = (): JSX.Element => {
-  const [chosenPatchSize, setChosenPatchSize] = useStore((state) => [
-    state.chosenPatchSize,
-    state.setChosenPatchSize,
-  ]);
+  const setChosenPatchSize = useStore((state) => state.setChosenPatchSize);
   const incrementScore = useStore((state) => state.incrementScore);
 
   const [hoverIdx, setHoverIdx] = useState<number>(-1);
-
-  const handleClick = (idx: number) => {
-    setChosenPatchSize(PATCH_SIZES[idx]);
-  };
+  const [selectedIdx, setSelectedIdx] = useState<number>(-1);
 
   return (
     <Box className="page">
@@ -28,7 +22,7 @@ const ResolutionPage = (): JSX.Element => {
       <h1 className="resolution-page-title">Choose a map to purchase</h1>
       <div className="resolution-page-options">
         {MAP_COSTS.map((cost, idx) => {
-          const selected = chosenPatchSize === PATCH_SIZES[idx];
+          const selected = selectedIdx === idx;
           return (
             <div
               className={`resolution-page-option${selected ? " selected" : ""}`}
@@ -46,7 +40,7 @@ const ResolutionPage = (): JSX.Element => {
               />
               <Button
                 label=""
-                onClick={() => handleClick(idx)}
+                onClick={() => setSelectedIdx(idx)}
                 variant="primary"
                 onMouseEnter={() => setHoverIdx(idx)}
                 onMouseLeave={() => setHoverIdx(-1)}
@@ -59,7 +53,12 @@ const ResolutionPage = (): JSX.Element => {
         })}
       </div>
       <LinkButton
-        onClick={() => incrementScore(-MAP_COSTS[chosenPatchSize])}
+        onClick={() => {
+          setChosenPatchSize(PATCH_SIZES[selectedIdx]);
+          const delta = -MAP_COSTS[selectedIdx];
+          console.log("incrementing score by", delta);
+          incrementScore(delta);
+        }}
         label="Confirm"
         to="/main/choice"
         variant="primary"
@@ -67,8 +66,8 @@ const ResolutionPage = (): JSX.Element => {
           position: "absolute",
           bottom: 35,
           right: 35,
-          pointerEvents: chosenPatchSize === -1 ? "none" : "auto",
-          opacity: chosenPatchSize === -1 ? 0.5 : 1.0,
+          pointerEvents: selectedIdx === -1 ? "none" : "auto",
+          opacity: selectedIdx === -1 ? 0.5 : 1.0,
         }}
       />
     </Box>
