@@ -10,7 +10,7 @@ from tqdm import tqdm
 from src.utils import to_range, digitize, avg_pool_2d
 
 SIDE_LENGTH = 8
-NUM_BINS = 4
+NUM_BINS = 7
 NUM_ROUNDS = 3
 PLOT = False
 

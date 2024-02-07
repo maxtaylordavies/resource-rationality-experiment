@@ -1,4 +1,13 @@
-export const COLORS = ["#FF3030", "#FF8A00", "#FFD600", "#00C14D"];
+// export const COLORS = ["#FF3030", "#FF8A00", "#FFD600", "#00C14D"];
+export const COLORS = [
+  "#FF3030",
+  "#FF6720",
+  "#FF9F10",
+  "#FFD600",
+  "#AACF1A",
+  "#55C833",
+  "#00C14D",
+];
 export const VEGETABLES = ["🥔", "🌽", "🥕", "🧅", "🥦"];
 export const NUM_ROUNDS = 3;
 export const NUM_CHOICES = 10;
