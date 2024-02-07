@@ -26,6 +26,8 @@ export const TileGrid = ({
   tileRadius = 10,
 }: TileGridProps) => {
   const session = useStore((state) => state.session);
+  const round = useStore((state) => state.round);
+  const patchSize = useStore((state) => state.chosenPatchSize);
   const focusedTiles = useStore((state) => state.focusedTiles);
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles,
@@ -85,7 +87,7 @@ export const TileGrid = ({
     }
 
     if (recordChoices) {
-      await recordChoiceResult(session.id, {
+      await recordChoiceResult(session.id, round, patchSize, {
         choice: focusedTiles,
         selected,
       });

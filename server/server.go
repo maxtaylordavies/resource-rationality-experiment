@@ -161,6 +161,8 @@ func (s *Server) registerRoutes() {
 		decoder := json.NewDecoder(r.Body)
 		var payload struct {
 			SessionId    int          `json:"session_id"`
+			Round 	     int          `json:"round"`
+			PatchSize    int          `json:"patch_size"`
 			ChoiceResult ChoiceResult `json:"choice_result"`
 		}
 
@@ -170,7 +172,7 @@ func (s *Server) registerRoutes() {
 			return
 		}
 
-		err = s.Store.RecordChoiceResult(payload.SessionId, payload.ChoiceResult)
+		err = s.Store.RecordChoiceResult(payload.SessionId, payload.Round, payload.PatchSize, payload.ChoiceResult)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

@@ -113,8 +113,8 @@ func (ds *Datastore) CreateSession(experimentId string, userId string, choiceRew
 	}, nil
 }
 
-func (ds *Datastore) RecordChoiceResult(sessionId int, choiceResult ChoiceResult) error {
-	stmt, err := ds.DB.Prepare("INSERT INTO choices(session_id, row1, col1, row2, col2, selected) values(?, ?, ?, ?, ?, ?)")
+func (ds *Datastore) RecordChoiceResult(sessionId int, round int, patchSize int, choiceResult ChoiceResult) error {
+	stmt, err := ds.DB.Prepare("INSERT INTO choices(session_id, round, patch_size, row1, col1, row2, col2, selected) values(?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -122,6 +122,8 @@ func (ds *Datastore) RecordChoiceResult(sessionId int, choiceResult ChoiceResult
 
 	_, err = stmt.Exec(
 		sessionId,
+		round,
+		patchSize,
 		choiceResult.Choice[0].Row,
 		choiceResult.Choice[0].Col,
 		choiceResult.Choice[1].Row,

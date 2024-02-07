@@ -36,10 +36,14 @@ export const getHeatmapFromFile = async (
 
 export const recordChoiceResult = async (
   sessionId: number,
+  round: number,
+  patchSize: number,
   choiceResult: ChoiceResult,
 ): Promise<void> => {
   await api.post("/choices/record", {
     session_id: sessionId,
+    round,
+    patch_size: patchSize,
     choice_result: choiceResult,
   });
 };
