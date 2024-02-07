@@ -1,5 +1,6 @@
 import json
 import time
+import os
 
 import GPy
 import jax.numpy as jnp
@@ -11,8 +12,8 @@ from src.utils import to_range, digitize, avg_pool_2d
 
 SIDE_LENGTH = 8
 NUM_BINS = 7
-NUM_ROUNDS = 3
-PLOT = False
+NUM_ROUNDS = 10
+PLOT = True
 
 
 def gp_covariance_matrix(var=1.0, scale=1.0):
@@ -28,16 +29,16 @@ rng_key = random.PRNGKey(seed)
 print(f"using seed {seed}")
 
 # generate covariance matrix
-K = gp_covariance_matrix(scale=1.5)
+K = gp_covariance_matrix(scale=2.0)
 
 # sample utility functions
 for round, key in enumerate(random.split(rng_key, NUM_ROUNDS)):
     u = random.multivariate_normal(key, jnp.zeros(SIDE_LENGTH**2), K)
     u = to_range(u, 0, 1).reshape((SIDE_LENGTH, SIDE_LENGTH))
 
-    axs = []
-    if PLOT:
-        fig, axs = plt.subplots(1, 4)
+    # create folder if it doesn't exist
+    os.makedirs(f"../heatmaps/{round + 1}", exist_ok=True)
+    fig, axs = plt.subplots(1, 4)
 
     for i in tqdm(range(4), desc=f"Round {round + 1}"):
         patch_size = int(2**i)
@@ -51,4 +52,4 @@ for round, key in enumerate(random.split(rng_key, NUM_ROUNDS)):
             axs[i].set_title(f"patch size {patch_size}")
 
     if PLOT:
-        plt.show()
+        fig.savefig(f"../heatmaps/{round + 1}/heatmap.png")
