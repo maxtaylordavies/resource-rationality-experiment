@@ -19,8 +19,10 @@ type Session struct {
 	ExperimentId string    `json:"experiment_id"`
 	UserId       string    `json:"user_id"`
 	CreatedAt    time.Time `json:"created_at"`
-	Texture 	 string    `json:"texture"`
+	Texture      string    `json:"texture"`
 	Cost         float64   `json:"cost"`
+	FinalScore   int       `json:"final_score"`
+	TextResponse string    `json:"text_response"`
 }
 
 type Pos struct {
@@ -59,7 +61,7 @@ func (ds *Datastore) RandomHeatmap(size int, bins int) Heatmap {
 }
 
 func (ds *Datastore) GetAllSessions() ([]Session, error) {
-	rows, err := ds.DB.Query("SELECT id, experiment_id, user_id, created_at, texture, cost FROM sessions")
+	rows, err := ds.DB.Query("SELECT id, experiment_id, user_id, created_at, texture, cost, final_score FROM sessions")
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +70,15 @@ func (ds *Datastore) GetAllSessions() ([]Session, error) {
 	var sessions []Session
 	for rows.Next() {
 		var session Session
-		err := rows.Scan(&session.ID, &session.ExperimentId, &session.UserId, &session.CreatedAt, &session.Texture, &session.Cost)
+		err := rows.Scan(
+			&session.ID,
+			&session.ExperimentId,
+			&session.UserId,
+			&session.CreatedAt,
+			&session.Texture,
+			&session.Cost,
+			&session.FinalScore,
+		)
 		if err != nil {
 			return nil, err
 		}
@@ -80,7 +90,16 @@ func (ds *Datastore) GetAllSessions() ([]Session, error) {
 
 func (ds *Datastore) GetSession(id int) (Session, error) {
 	var session Session
-	err := ds.DB.QueryRow("SELECT id, experiment_id, user_id, created_at, texture, cost FROM sessions WHERE id=?", id).Scan(&session.ID, &session.ExperimentId, &session.UserId, &session.CreatedAt, &session.Texture, &session.Cost)
+	err := ds.DB.QueryRow("SELECT id, experiment_id, user_id, created_at, texture, cost, final_score, text_response FROM sessions WHERE id=?", id).Scan(
+		&session.ID,
+		&session.ExperimentId,
+		&session.UserId,
+		&session.CreatedAt,
+		&session.Texture,
+		&session.Cost,
+		&session.FinalScore,
+		&session.TextResponse,
+	)
 	if err != nil {
 		return Session{}, err
 	}
@@ -114,6 +133,17 @@ func (ds *Datastore) CreateSession(experimentId string, userId string, texture s
 		Texture:      texture,
 		Cost:         cost,
 	}, nil
+}
+
+func (ds *Datastore) UpdateSession(sessionId int, finalScore int, textResponse string) error {
+	stmt, err := ds.DB.Prepare("UPDATE sessions SET final_score=?, text_response=? WHERE id=?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(finalScore, textResponse, sessionId)
+	return err
 }
 
 func (ds *Datastore) RecordChoiceResult(sessionId int, round int, patchSize int, choiceResult ChoiceResult) error {

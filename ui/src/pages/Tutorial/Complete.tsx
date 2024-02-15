@@ -28,7 +28,7 @@ const CompletePage = (): JSX.Element => {
             variant="secondary"
             style={{ marginRight: 10 }}
           />
-          <LinkButton to="/main/start" label="Proceed" variant="primary" />
+          <LinkButton to="/complete" label="Proceed" variant="primary" />
         </div>
       </div>
     </Box>

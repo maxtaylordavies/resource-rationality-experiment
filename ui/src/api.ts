@@ -26,6 +26,18 @@ export const getSession = async (sessionId: number): Promise<Session> => {
   return response.data;
 };
 
+export const updateSession = async (
+  sessionId: number,
+  finalScore: number,
+  textResponse: string,
+) => {
+  await api.post("/sessions/update", {
+    id: sessionId,
+    final_score: finalScore,
+    text_response: textResponse,
+  });
+};
+
 export const getTutorialHeatmap = async (): Promise<Heatmap> => {
   const response = await api.get("/heatmap/tutorial");
   return response.data;
