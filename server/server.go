@@ -143,6 +143,7 @@ func (s *Server) registerRoutes() {
 			UserId       string  `json:"user_id"`
 			Texture      string  `json:"texture"`
 			Cost         float64 `json:"cost"`
+			ProlificMetadata ProlificMetadata `json:"prolific_metadata"`
 		}
 
 		err := decoder.Decode(&payload)
@@ -151,7 +152,7 @@ func (s *Server) registerRoutes() {
 			return
 		}
 
-		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.Texture, payload.Cost)
+		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.Texture, payload.Cost, payload.ProlificMetadata)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

@@ -3,7 +3,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { Session, useStore } from "./store";
 import { getSession, createSession } from "./api";
-import { getValueFromUrlOrLocalstorage, writeToLocalStorage } from "./utils";
+import {
+  getValueFromUrlOrLocalstorage,
+  writeToLocalStorage,
+  getProlificMetadata,
+} from "./utils";
 import InstructionsPage from "./pages/Instructions";
 import TutorialStartPage from "./pages/Tutorial/Start";
 import TutorialChoicePage from "./pages/Tutorial/Choice";
@@ -74,6 +78,7 @@ const App = () => {
           getValueFromUrlOrLocalstorage("userid"),
           getValueFromUrlOrLocalstorage("texture"),
           Number(getValueFromUrlOrLocalstorage("cost")),
+          getProlificMetadata(),
         )) as Session;
       }
 

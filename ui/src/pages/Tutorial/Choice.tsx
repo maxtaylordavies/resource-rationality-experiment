@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useStore } from "../../store";
 import { getTutorialHeatmap } from "../../api";
-import { NUM_CHOICES } from "../../constants";
+import { NUM_CHOICES_TUTORIAL } from "../../constants";
 import { Box } from "../../components/Box/Box";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
 import { TopBar } from "../../components/TopBar/TopBar";
@@ -37,7 +37,7 @@ const ChoicePage = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (choiceCount === NUM_CHOICES) {
+    if (choiceCount === NUM_CHOICES_TUTORIAL) {
       navigate("/tutorial/complete");
     }
   }, [choiceCount, navigate]);

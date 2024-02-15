@@ -6,7 +6,7 @@ import { useStore } from "../store";
 import { Button } from "../components/Button/Button";
 import { Box } from "../components/Box/Box";
 
-const PROLIFIC_CODE = "ABC123";
+const PROLIFIC_CODE = "C1LEZ1G5";
 
 const ExperimentCompletePage = (): JSX.Element => {
   const session = useStore((state) => state.session);

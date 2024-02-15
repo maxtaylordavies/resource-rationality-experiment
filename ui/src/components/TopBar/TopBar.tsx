@@ -1,4 +1,9 @@
-import { NUM_ROUNDS, NUM_CHOICES, VEGETABLES } from "../../constants";
+import {
+  NUM_ROUNDS,
+  NUM_CHOICES_TUTORIAL,
+  NUM_CHOICES_MAIN,
+  VEGETABLES,
+} from "../../constants";
 import { useStore } from "../../store";
 import { Coin } from "../Coin/Coin";
 import "./top-bar.css";
@@ -8,9 +13,11 @@ export const TopBar = (): JSX.Element => {
   const choiceCount = useStore((state) => state.choiceCount);
   const score = useStore((state) => state.score);
 
-  const roundText = window.location.pathname.includes("tutorial")
+  const isTutorial = window.location.pathname.includes("tutorial");
+  const roundText = isTutorial
     ? "Tutorial"
     : `Round ${round} of ${NUM_ROUNDS} ${VEGETABLES[round - 1]}`;
+  const NUM_CHOICES = isTutorial ? NUM_CHOICES_TUTORIAL : NUM_CHOICES_MAIN;
 
   return (
     <div className="top-bar">

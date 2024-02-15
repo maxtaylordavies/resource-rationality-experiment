@@ -8,6 +8,17 @@ export const getValueFromUrlOrLocalstorage = (key: string) => {
   );
 };
 
+export const getProlificMetadata = () => {
+  const metadata: { [key: string]: string } = {};
+  const params = new URLSearchParams(window.location.search);
+  params.forEach((val, key) => {
+    if (key.startsWith("PRLFC")) {
+      metadata[key] = val;
+    }
+  });
+  return metadata;
+};
+
 export const writeToLocalStorage = (key: string, val: any) => {
   localStorage.setItem(`${PREFIX}${key}`, JSON.stringify(val));
 };

@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"math/rand"
 	"time"
 
@@ -14,15 +15,22 @@ type Datastore struct {
 
 type Heatmap [][]int
 
+type ProlificMetadata struct {
+	PRLFC_PID string `json:"PRLFC_PID"`
+	PRLFC_STUDY_ID     string `json:"PRLFC_STUDY_ID"`
+	PRLFC_SESS_ID   string `json:"PRLFC_SESS_ID"`
+}
+
 type Session struct {
-	ID           int       `json:"id"`
-	ExperimentId string    `json:"experiment_id"`
-	UserId       string    `json:"user_id"`
-	CreatedAt    time.Time `json:"created_at"`
-	Texture      string    `json:"texture"`
-	Cost         float64   `json:"cost"`
-	FinalScore   int       `json:"final_score"`
-	TextResponse string    `json:"text_response"`
+	ID               int              `json:"id"`
+	ExperimentId     string           `json:"experiment_id"`
+	UserId           string           `json:"user_id"`
+	CreatedAt        time.Time        `json:"created_at"`
+	Texture          string           `json:"texture"`
+	Cost             float64          `json:"cost"`
+	FinalScore       int              `json:"final_score"`
+	TextResponse     string           `json:"text_response"`
+	ProlificMetadata ProlificMetadata `json:"prolific_metadata"`
 }
 
 type Pos struct {
@@ -90,7 +98,8 @@ func (ds *Datastore) GetAllSessions() ([]Session, error) {
 
 func (ds *Datastore) GetSession(id int) (Session, error) {
 	var session Session
-	err := ds.DB.QueryRow("SELECT id, experiment_id, user_id, created_at, texture, cost, final_score, text_response FROM sessions WHERE id=?", id).Scan(
+	var pmdStr string
+	err := ds.DB.QueryRow("SELECT id, experiment_id, user_id, created_at, texture, cost, final_score, text_response, prolific_metadata FROM sessions WHERE id=?", id).Scan(
 		&session.ID,
 		&session.ExperimentId,
 		&session.UserId,
@@ -99,7 +108,13 @@ func (ds *Datastore) GetSession(id int) (Session, error) {
 		&session.Cost,
 		&session.FinalScore,
 		&session.TextResponse,
+		&pmdStr,
 	)
+	if err != nil {
+		return Session{}, err
+	}
+
+	err = json.Unmarshal([]byte(pmdStr), &session.ProlificMetadata)
 	if err != nil {
 		return Session{}, err
 	}
@@ -107,15 +122,30 @@ func (ds *Datastore) GetSession(id int) (Session, error) {
 	return session, nil
 }
 
-func (ds *Datastore) CreateSession(experimentId string, userId string, texture string, cost float64) (Session, error) {
-	stmt, err := ds.DB.Prepare("INSERT INTO sessions(experiment_id, user_id, created_at, texture, cost) values(?, ?, ?, ?, ?)")
+func (ds *Datastore) CreateSession(experimentId string, userId string, texture string, cost float64, prolificData ProlificMetadata) (Session, error) {
+	stmt, err := ds.DB.Prepare("INSERT INTO sessions(experiment_id, user_id, created_at, texture, cost, final_score, text_response, prolific_metadata) values(?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return Session{}, err
 	}
 	defer stmt.Close()
 
+	pmdBytes, err := json.Marshal(prolificData)
+	if err != nil {
+		return Session{}, err
+	}
+	pmdStr := string(pmdBytes)
+
 	createdAt := time.Now()
-	res, err := stmt.Exec(experimentId, userId, createdAt, texture, cost)
+	res, err := stmt.Exec(
+		experimentId,
+		userId,
+		createdAt,
+		texture,
+		cost,
+	 	0,
+		"",
+		pmdStr,
+	)
 	if err != nil {
 		return Session{}, err
 	}
@@ -132,6 +162,9 @@ func (ds *Datastore) CreateSession(experimentId string, userId string, texture s
 		CreatedAt:    createdAt,
 		Texture:      texture,
 		Cost:         cost,
+		FinalScore:   0,
+		TextResponse: "",
+		ProlificMetadata: prolificData,
 	}, nil
 }
 

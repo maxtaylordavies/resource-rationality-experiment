@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useStore } from "../../store";
-import { NUM_ROUNDS, NUM_CHOICES, VEGETABLES } from "../../constants";
+import { NUM_ROUNDS, NUM_CHOICES_MAIN, VEGETABLES } from "../../constants";
 import { getHeatmapFromFile } from "../../api";
 import { Box } from "../../components/Box/Box";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
@@ -48,7 +48,7 @@ const ChoicePage = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (choiceCount === NUM_CHOICES) {
+    if (choiceCount === NUM_CHOICES_MAIN) {
       navigate(round === NUM_ROUNDS ? "/complete" : "/main/round-complete");
     }
   }, [choiceCount, round, navigate]);
