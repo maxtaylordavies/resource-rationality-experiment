@@ -7,16 +7,6 @@ from jax import random
 from .utils import to_range
 
 
-def sample_covariance_matrix(
-    n_options: int,
-    variance=1,
-    lengthscale=1,
-) -> jnp.ndarray:
-    kernel = GPy.kern.RBF(1, variance=variance, lengthscale=lengthscale)
-    X = jnp.arange(n_options)[:, None]
-    return kernel.K(X, X)
-
-
 def sample_utility_function(
     rng_key: random.KeyArray,
     cov: jnp.ndarray,

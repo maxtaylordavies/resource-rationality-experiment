@@ -13,13 +13,13 @@ from tqdm import tqdm
 
 from src.utils import (
     avg_pool_1d,
+    gp_covariance_matrix_1d,
     aggregated_covariance_matrix,
     gaussian_entropy,
     save_figure,
 )
 from src.modelling import (
     expected_acc_approx,
-    sample_covariance_matrix,
     sample_utility_function,
     simulate_choices,
     simulate_predictions,
@@ -33,7 +33,7 @@ sns.set_theme()
 def state_agg_experiment(n_seeds: int, betas: List[float], n_options=128):
     results = []
     pool_sizes = [int(2**i) for i in range(int(jnp.log2(n_options)) + 1)]
-    cov = sample_covariance_matrix(n_options, lengthscale=1)
+    cov = gp_covariance_matrix_1d(n_options, lengthscale=1)
 
     for _ in tqdm(range(n_seeds)):
         seed = int(time.time())

@@ -12,6 +12,7 @@ const ChoicePage = (): JSX.Element => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
+  const session = useStore((state) => state.session);
   const round = useStore((state) => state.round);
   const [ehm, setEhm] = useStore((state) => [
     state.evidenceHeatmap,
@@ -29,8 +30,15 @@ const ChoicePage = (): JSX.Element => {
 
   useEffect(() => {
     const setup = async () => {
-      const _ehm = await getHeatmapFromFile(round, chosenPatchSize);
-      const _thm = await getHeatmapFromFile(round, 1);
+      if (!session) {
+        return;
+      }
+      const _ehm = await getHeatmapFromFile(
+        session.texture,
+        round,
+        chosenPatchSize,
+      );
+      const _thm = await getHeatmapFromFile(session.texture, round, 1);
       setEhm(_ehm);
       setThm(_thm);
       setRandomFocusedTiles();

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-import { COLORS } from "../../constants";
+import { COLORS, CHOICE_REWARD } from "../../constants";
 import { Heatmap, useStore } from "../../store";
 import { recordChoiceResult } from "../../api";
 import "./tile-grid.css";
@@ -81,9 +81,9 @@ export const TileGrid = ({
     );
     const values = focusedTiles.map((tile) => heatmap[tile.row][tile.col]);
     if (values[selected] === Math.max(...values)) {
-      incrementScore(session.choice_reward);
+      incrementScore(CHOICE_REWARD);
     } else {
-      incrementScore(-session.choice_reward);
+      incrementScore(-CHOICE_REWARD);
     }
 
     if (recordChoices) {

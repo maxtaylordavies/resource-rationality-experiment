@@ -7,7 +7,8 @@ export type Session = {
   experiment_id: string;
   user_id: string;
   created_at: Date;
-  choice_reward: number;
+  texture: string;
+  cost: number;
 };
 
 export type Heatmap = number[][];

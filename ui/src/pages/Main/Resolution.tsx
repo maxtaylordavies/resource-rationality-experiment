@@ -10,13 +10,14 @@ import { LinkButton } from "../../components/Button/LinkButton";
 import { Coin } from "../../components/Coin/Coin";
 
 const ResolutionPage = (): JSX.Element => {
+  const session = useStore((state) => state.session);
   const setChosenPatchSize = useStore((state) => state.setChosenPatchSize);
   const incrementScore = useStore((state) => state.incrementScore);
 
   const [hoverIdx, setHoverIdx] = useState<number>(-1);
   const [selectedIdx, setSelectedIdx] = useState<number>(-1);
 
-  return (
+  return session ? (
     <Box className="page">
       <TopBar />
       <h1 className="resolution-page-title">Choose a map to purchase</h1>
@@ -46,7 +47,8 @@ const ResolutionPage = (): JSX.Element => {
                 onMouseLeave={() => setHoverIdx(-1)}
                 animate={{ scale: selected ? 1.05 : 1.0 }}
               >
-                {cost} <Coin height={28} style={{ marginLeft: 5 }} />
+                {Math.round(cost * session?.cost)}{" "}
+                <Coin height={28} style={{ marginLeft: 5 }} />
               </Button>
             </div>
           );
@@ -55,7 +57,7 @@ const ResolutionPage = (): JSX.Element => {
       <LinkButton
         onClick={() => {
           setChosenPatchSize(PATCH_SIZES[selectedIdx]);
-          const delta = -MAP_COSTS[selectedIdx];
+          const delta = Math.round(-MAP_COSTS[selectedIdx] * session?.cost);
           console.log("incrementing score by", delta);
           incrementScore(delta);
         }}
@@ -71,6 +73,8 @@ const ResolutionPage = (): JSX.Element => {
         }}
       />
     </Box>
+  ) : (
+    <></>
   );
 };
 

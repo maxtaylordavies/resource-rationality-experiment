@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useStore } from "../../store";
-import { getHeatmapFromFile } from "../../api";
+import { getTutorialHeatmap } from "../../api";
 import { NUM_CHOICES } from "../../constants";
 import { Box } from "../../components/Box/Box";
 import { TileGrid } from "../../components/TileGrid/TileGrid";
@@ -27,7 +27,7 @@ const ChoicePage = (): JSX.Element => {
 
   useEffect(() => {
     const setup = async () => {
-      const hmap = await getHeatmapFromFile("tutorial", 1);
+      const hmap = await getTutorialHeatmap();
       setEhm(hmap);
       setThm(hmap);
       setRandomFocusedTiles();

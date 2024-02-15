@@ -72,6 +72,8 @@ const App = () => {
         sess = (await createSession(
           getValueFromUrlOrLocalstorage("expid"),
           getValueFromUrlOrLocalstorage("userid"),
+          getValueFromUrlOrLocalstorage("texture"),
+          Number(getValueFromUrlOrLocalstorage("cost")),
         )) as Session;
       }
 

@@ -95,15 +95,19 @@ func (s *Server) registerRoutes() {
 		respond(w, heatmap)
 	}).Methods("GET")
 
+	s.Router.HandleFunc("/api/heatmap/tutorial", func (w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "heatmaps/tutorial.txt")
+	}).Methods("GET")
+
 	s.Router.HandleFunc("/api/heatmap/from_file", func(w http.ResponseWriter, r *http.Request) {
+		texture := r.URL.Query().Get("texture")
 		round := r.URL.Query().Get("round")
 		ps := r.URL.Query().Get("ps")
-		if round == "" || ps == "" {
-			http.Error(w, "missing round or ps", http.StatusBadRequest)
+		if texture == "" || round == "" || ps == "" {
+			http.Error(w, "missing texture, round or ps query param", http.StatusBadRequest)
 			return
 		}
-
-		http.ServeFile(w, r, "heatmaps/" + round + "/" + ps + ".txt")
+		http.ServeFile(w, r, "heatmaps/" + texture + "/" + round + "/" + ps + ".txt")
 	}).Methods("GET")
 
 	s.Router.HandleFunc("/api/sessions/all", func(w http.ResponseWriter, r *http.Request) {
@@ -135,9 +139,10 @@ func (s *Server) registerRoutes() {
 	s.Router.HandleFunc("/api/sessions/create", func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
 		var payload struct {
-			ExperimentId string `json:"experiment_id"`
-			UserId       string `json:"user_id"`
-			ChoiceReward int    `json:"choice_reward"`
+			ExperimentId string  `json:"experiment_id"`
+			UserId       string  `json:"user_id"`
+			Texture 	 string  `json:"texture"`
+			Cost 		 float64 `json:"cost"`
 		}
 
 		err := decoder.Decode(&payload)
@@ -146,7 +151,7 @@ func (s *Server) registerRoutes() {
 			return
 		}
 
-		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.ChoiceReward)
+		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.Texture, payload.Cost)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
