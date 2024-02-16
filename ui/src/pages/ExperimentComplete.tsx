@@ -13,7 +13,7 @@ const ExperimentCompletePage = (): JSX.Element => {
   const score = useStore((state) => state.score);
 
   const [response, setResponse] = useState("");
-  const [submitted, setSubmitted] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async () => {
     if (session) {
