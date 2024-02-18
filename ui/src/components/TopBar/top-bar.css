@@ -13,7 +13,7 @@
 }
 
 .round-text {
-    width: 190px;
+    width: 200px;
     text-align: left;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .choice-count-box {
-    width: 190px;
+    width: 200px;
     height: 42px;
     display: flex;
     flex-direction: row;

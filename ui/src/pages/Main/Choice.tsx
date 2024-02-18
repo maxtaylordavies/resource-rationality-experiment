@@ -73,7 +73,7 @@ const ChoicePage = (): JSX.Element => {
               <TileGrid
                 heatmap={ehm}
                 dynamic={false}
-                tileSize={200 / (8 / chosenPatchSize)}
+                tileSize={300 / (8 / chosenPatchSize)}
                 tileMargin={0}
                 tileRadius={0}
               />
