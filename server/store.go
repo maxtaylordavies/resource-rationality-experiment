@@ -122,7 +122,7 @@ func (ds *Datastore) GetSession(id int) (Session, error) {
 	return session, nil
 }
 
-func (ds *Datastore) CreateSession(experimentId string, userId string, texture string, cost float64, prolificData ProlificMetadata) (Session, error) {
+func (ds *Datastore) CreateSession(experimentId string, userId string, cost float64, prolificData ProlificMetadata) (Session, error) {
 	stmt, err := ds.DB.Prepare("INSERT INTO sessions(experiment_id, user_id, created_at, texture, cost, final_score, text_response, prolific_metadata) values(?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return Session{}, err
@@ -140,7 +140,7 @@ func (ds *Datastore) CreateSession(experimentId string, userId string, texture s
 		experimentId,
 		userId,
 		createdAt,
-		texture,
+		"",
 		cost,
 	 	0,
 		"",
@@ -151,6 +151,16 @@ func (ds *Datastore) CreateSession(experimentId string, userId string, texture s
 	}
 
 	id, err := res.LastInsertId()
+	if err != nil {
+		return Session{}, err
+	}
+
+	// set texture based on id: "rough" if odd, "smooth" if even
+	texture := "smooth"
+	if id % 2 == 1 {
+		texture = "rough"
+	}
+	err = ds.SetSessionTexture(int(id), texture)
 	if err != nil {
 		return Session{}, err
 	}
@@ -166,6 +176,17 @@ func (ds *Datastore) CreateSession(experimentId string, userId string, texture s
 		TextResponse: "",
 		ProlificMetadata: prolificData,
 	}, nil
+}
+
+func (ds *Datastore) SetSessionTexture(sessionId int, texture string) error {
+	stmt, err := ds.DB.Prepare("UPDATE sessions SET texture=? WHERE id=?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(texture, sessionId)
+	return err
 }
 
 func (ds *Datastore) UpdateSession(sessionId int, finalScore int, textResponse string) error {

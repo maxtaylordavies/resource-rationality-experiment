@@ -9,14 +9,12 @@ const api = axios.create({
 export const createSession = async (
   experimentId: string,
   userId: string,
-  texture: string,
   cost: number,
   prolificMetadata: { [key: string]: string },
 ): Promise<Session> => {
   const response = await api.post("/sessions/create", {
     experiment_id: experimentId,
     user_id: userId,
-    texture,
     cost,
     prolific_metadata: prolificMetadata,
   });
