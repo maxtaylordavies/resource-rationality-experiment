@@ -7,9 +7,16 @@ interface Props extends HTMLMotionProps<"button"> {
   label: string;
   onClick: () => void;
   variant: "primary" | "secondary";
+  children?: React.ReactNode;
 }
 
-export const Button = ({ label, onClick, variant, ...props }: Props) => {
+export const Button = ({
+  label,
+  onClick,
+  variant,
+  children,
+  ...props
+}: Props) => {
   return (
     <motion.button
       className={`button ${variant}`}
@@ -18,7 +25,7 @@ export const Button = ({ label, onClick, variant, ...props }: Props) => {
       onClick={onClick}
       {...props}
     >
-      {label}
+      {label} {children}
     </motion.button>
   );
 };

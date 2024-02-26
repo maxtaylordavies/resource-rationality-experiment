@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-import { COLORS } from "../../constants";
+import { COLORS, CHOICE_REWARD } from "../../constants";
 import { Heatmap, useStore } from "../../store";
 import { recordChoiceResult } from "../../api";
 import "./tile-grid.css";
@@ -26,7 +26,8 @@ export const TileGrid = ({
   tileRadius = 10,
 }: TileGridProps) => {
   const session = useStore((state) => state.session);
-  // const heatmap = useStore((state) => state.heatmap);
+  const round = useStore((state) => state.round);
+  const patchSize = useStore((state) => state.chosenPatchSize);
   const focusedTiles = useStore((state) => state.focusedTiles);
   const setRandomFocusedTiles = useStore(
     (state) => state.setRandomFocusedTiles,
@@ -80,12 +81,13 @@ export const TileGrid = ({
     );
     const values = focusedTiles.map((tile) => heatmap[tile.row][tile.col]);
     if (values[selected] === Math.max(...values)) {
-      console.log(`incrementing score by ${session.choice_reward}`);
-      incrementScore(session.choice_reward);
+      incrementScore(CHOICE_REWARD);
+    } else {
+      incrementScore(-CHOICE_REWARD);
     }
 
     if (recordChoices) {
-      await recordChoiceResult(session.id, {
+      await recordChoiceResult(session.id, round, patchSize, {
         choice: focusedTiles,
         selected,
       });
@@ -137,7 +139,7 @@ export const TileGrid = ({
       })}
     </div>
   ) : (
-    <div />
+    <div>uh oh</div>
   );
 };
 
@@ -170,7 +172,7 @@ const Tile = ({
       animate={{
         opacity: type === "unfocused" ? 0.5 : 1.0,
       }}
-      whileHover={{ scale: type === "focused" ? 1.1 : 1.0 }}
+      whileHover={{ scale: type === "focused" ? 1.07 : 1.0 }}
       style={{
         backgroundColor: color,
         pointerEvents: type === "focused" ? "auto" : "none",

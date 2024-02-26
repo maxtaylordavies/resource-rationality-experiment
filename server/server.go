@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 	"time"
-	"log"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -96,15 +95,19 @@ func (s *Server) registerRoutes() {
 		respond(w, heatmap)
 	}).Methods("GET")
 
+	s.Router.HandleFunc("/api/heatmap/tutorial", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "heatmaps/tutorial.txt")
+	}).Methods("GET")
+
 	s.Router.HandleFunc("/api/heatmap/from_file", func(w http.ResponseWriter, r *http.Request) {
+		texture := r.URL.Query().Get("texture")
 		round := r.URL.Query().Get("round")
 		ps := r.URL.Query().Get("ps")
-		if round == "" || ps == "" {
-			http.Error(w, "missing round or ps", http.StatusBadRequest)
+		if texture == "" || round == "" || ps == "" {
+			http.Error(w, "missing texture, round or ps query param", http.StatusBadRequest)
 			return
 		}
-
-		http.ServeFile(w, r, "heatmaps/" + round + "/" + ps + ".txt")
+		http.ServeFile(w, r, "heatmaps/"+texture+"/"+round+"/"+ps+".txt")
 	}).Methods("GET")
 
 	s.Router.HandleFunc("/api/sessions/all", func(w http.ResponseWriter, r *http.Request) {
@@ -134,12 +137,12 @@ func (s *Server) registerRoutes() {
 	}).Methods("GET")
 
 	s.Router.HandleFunc("/api/sessions/create", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("/api/sessions/create")
 		decoder := json.NewDecoder(r.Body)
 		var payload struct {
-			ExperimentId string `json:"experiment_id"`
-			UserId       string `json:"user_id"`
-			ChoiceReward int    `json:"choice_reward"`
+			ExperimentId string  `json:"experiment_id"`
+			UserId       string  `json:"user_id"`
+			Cost         float64 `json:"cost"`
+			ProlificMetadata ProlificMetadata `json:"prolific_metadata"`
 		}
 
 		err := decoder.Decode(&payload)
@@ -147,9 +150,8 @@ func (s *Server) registerRoutes() {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		log.Println(payload)
 
-		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.ChoiceReward)
+		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.Cost, payload.ProlificMetadata)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -157,10 +159,32 @@ func (s *Server) registerRoutes() {
 		respond(w, session)
 	}).Methods("POST")
 
+	s.Router.HandleFunc("/api/sessions/update", func(w http.ResponseWriter, r *http.Request) {
+		decoder := json.NewDecoder(r.Body)
+		var payload struct {
+			Id           int    `json:"id"`
+			FinalScore   int    `json:"final_score"`
+			TextResponse string `json:"text_response"`
+		}
+
+		err := decoder.Decode(&payload)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		err = s.Store.UpdateSession(payload.Id, payload.FinalScore, payload.TextResponse)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	}).Methods("POST")
+
 	s.Router.HandleFunc("/api/choices/record", func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
 		var payload struct {
 			SessionId    int          `json:"session_id"`
+			Round        int          `json:"round"`
+			PatchSize    int          `json:"patch_size"`
 			ChoiceResult ChoiceResult `json:"choice_result"`
 		}
 
@@ -170,7 +194,7 @@ func (s *Server) registerRoutes() {
 			return
 		}
 
-		err = s.Store.RecordChoiceResult(payload.SessionId, payload.ChoiceResult)
+		err = s.Store.RecordChoiceResult(payload.SessionId, payload.Round, payload.PatchSize, payload.ChoiceResult)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

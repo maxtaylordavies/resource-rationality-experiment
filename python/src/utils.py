@@ -1,3 +1,4 @@
+import GPy
 import jax.numpy as jnp
 from tqdm import tqdm
 
@@ -22,15 +23,35 @@ def avg_pool_1d(x: jnp.ndarray, pool_size: int) -> jnp.ndarray:
     return to_range(jnp.repeat(tmp, pool_size), jnp.min(x), jnp.max(x))
 
 
-def avg_pool_2d(x: jnp.ndarray, pool_size: int) -> jnp.ndarray:
+def avg_pool_2d(x: jnp.ndarray, pool_size: int, same_shape=False) -> jnp.ndarray:
     if pool_size == 1:
         return x
 
     r, c = x.shape
     r, c = r // pool_size, c // pool_size
     tmp = jnp.mean(x.reshape(r, pool_size, c, pool_size), axis=(1, 3))
-    return tmp
-    # return jnp.repeat(jnp.repeat(tmp, pool_size, axis=0), pool_size, axis=1)
+    return (
+        jnp.repeat(jnp.repeat(tmp, pool_size, axis=0), pool_size, axis=1)
+        if same_shape
+        else tmp
+    )
+
+
+def gp_covariance_matrix_1d(
+    n_options: int,
+    variance=1,
+    lengthscale=1,
+) -> jnp.ndarray:
+    kernel = GPy.kern.RBF(1, variance=variance, lengthscale=lengthscale)
+    X = jnp.arange(n_options)[:, None]
+    return kernel.K(X, X)
+
+
+def gp_covariance_matrix_2d(side_length: int, var=1.0, scale=1.0):
+    xx, yy = jnp.mgrid[0:side_length, 0:side_length]
+    X = jnp.vstack((xx.flatten(), yy.flatten())).T
+    k = GPy.kern.RBF(input_dim=2, variance=var, lengthscale=scale)  # define kernel
+    return k.K(X)  # compute covariance matrix
 
 
 def aggregated_covariance_matrix(K, patch_size):

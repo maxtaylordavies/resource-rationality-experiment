@@ -19,7 +19,7 @@ const RoundCompletePage = (): JSX.Element => {
 
   return (
     <Box className="page">
-      <div className="tutorial-start-container">
+      <div className="phase-start-container">
         <h1>Round {round} complete</h1>
         <Button
           label="Next round"

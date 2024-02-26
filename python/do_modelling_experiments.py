@@ -13,16 +13,16 @@ from tqdm import tqdm
 
 from src.utils import (
     avg_pool_1d,
+    gp_covariance_matrix_1d,
     aggregated_covariance_matrix,
     gaussian_entropy,
     save_figure,
 )
 from src.modelling import (
     expected_acc_approx,
-    sample_covariance_matrix,
-    sample_utility_function,
-    simulate_choices,
-    simulate_predictions,
+    sample_utility_function_1d,
+    simulate_choices_1d,
+    simulate_predictions_1d,
 )
 
 pd.options.mode.chained_assignment = None
@@ -33,17 +33,17 @@ sns.set_theme()
 def state_agg_experiment(n_seeds: int, betas: List[float], n_options=128):
     results = []
     pool_sizes = [int(2**i) for i in range(int(jnp.log2(n_options)) + 1)]
-    cov = sample_covariance_matrix(n_options, lengthscale=1)
+    cov = gp_covariance_matrix_1d(n_options, lengthscale=1)
 
     for _ in tqdm(range(n_seeds)):
         seed = int(time.time())
         rng_key = random.PRNGKey(seed)
-        u = sample_utility_function(rng_key, cov, min_val=-1, max_val=1)
+        u = sample_utility_function_1d(rng_key, cov, min_val=-1, max_val=1)
         for ps in pool_sizes:
             u_hat = avg_pool_1d(u, ps)
             cost = gaussian_entropy(aggregated_covariance_matrix(cov, ps))
             for beta in betas:
-                # pairs, choices = simulate_choices(rng_key, u, beta, n_trials=1000)
+                # pairs, choices = simulate_choices_1d(rng_key, u, beta, n_trials=1000)
                 results.append(
                     {
                         "beta": beta,
@@ -58,7 +58,7 @@ def state_agg_experiment(n_seeds: int, betas: List[float], n_options=128):
                 #     {
                 #         "beta": beta,
                 #         "pool_size": ps,
-                #         "accuracy": simulate_predictions(pairs, choices, u_hat),
+                #         "accuracy": simulate_predictions_1d(pairs, choices, u_hat),
                 #         "cost": float(cost),
                 #         "type": "empirical",
                 #         "seed": seed,

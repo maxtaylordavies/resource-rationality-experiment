@@ -7,7 +7,9 @@ export type Session = {
   experiment_id: string;
   user_id: string;
   created_at: Date;
-  choice_reward: number;
+  texture: string;
+  cost: number;
+  final_score: number;
 };
 
 export type Heatmap = number[][];
@@ -46,6 +48,10 @@ export type GlobalState = {
   setSession: (session: Session) => void;
   heatmap: Heatmap;
   setHeatmap: (heatmap: Heatmap) => void;
+  evidenceHeatmap: Heatmap;
+  setEvidenceHeatmap: (heatmap: Heatmap) => void;
+  trueHeatmap: Heatmap;
+  setTrueHeatmap: (heatmap: Heatmap) => void;
   round: number;
   incrementRound: () => void;
   chosenPatchSize: number;
@@ -58,6 +64,7 @@ export type GlobalState = {
   setRandomFocusedTiles: () => void;
   choiceCount: number;
   incrementChoiceCount: () => void;
+  resetChoiceCount: () => void;
 };
 
 export const useStore = create<GlobalState>((set) => ({
@@ -65,6 +72,10 @@ export const useStore = create<GlobalState>((set) => ({
   setSession: (session: Session) => set({ session: session }),
   heatmap: [],
   setHeatmap: (heatmap: Heatmap) => set({ heatmap: heatmap }),
+  evidenceHeatmap: [],
+  setEvidenceHeatmap: (heatmap: Heatmap) => set({ evidenceHeatmap: heatmap }),
+  trueHeatmap: [],
+  setTrueHeatmap: (heatmap: Heatmap) => set({ trueHeatmap: heatmap }),
   round: 0,
   incrementRound: () =>
     set((state) => ({
@@ -82,9 +93,10 @@ export const useStore = create<GlobalState>((set) => ({
   setFocusedTiles: (tiles: Pos[]) => set({ focusedTiles: tiles }),
   setRandomFocusedTiles: () =>
     set((state) => ({
-      focusedTiles: sampleRandomChoicePair(state.heatmap.length),
+      focusedTiles: sampleRandomChoicePair(state.trueHeatmap.length),
     })),
   choiceCount: 0,
   incrementChoiceCount: () =>
     set((state) => ({ choiceCount: state.choiceCount + 1 })),
+  resetChoiceCount: () => set({ choiceCount: 0 }),
 }));

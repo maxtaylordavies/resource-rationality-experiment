@@ -5,9 +5,11 @@ import { Box } from "../../components/Box/Box";
 import { LinkButton } from "../../components/Button/LinkButton";
 
 const CompletePage = (): JSX.Element => {
+  const resetChoiceCount = useStore((state) => state.resetChoiceCount);
   const resetScore = useStore((state) => state.resetScore);
 
   useEffect(() => {
+    resetChoiceCount();
     resetScore();
   }, []);
 

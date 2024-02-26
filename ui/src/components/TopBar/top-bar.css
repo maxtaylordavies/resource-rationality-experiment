@@ -13,13 +13,12 @@
 }
 
 .round-text {
-    width: 190px;
-    font-weight: 700;
+    width: 200px;
     text-align: left;
 }
 
 .score-box {
-    width: 170px;
+    width: 150px;
     height: 42px;
     border-radius: 21px;
     display: flex;
@@ -41,7 +40,7 @@
 }
 
 .choice-count-box {
-    width: 190px;
+    width: 200px;
     height: 42px;
     display: flex;
     flex-direction: row;
