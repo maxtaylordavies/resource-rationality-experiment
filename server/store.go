@@ -102,7 +102,7 @@ func (ds *Datastore) GetAllSessions() ([]Session, error) {
 func (ds *Datastore) GetSession(id int) (Session, error) {
 	var session Session
 	var pmdStr string
-	err := ds.DB.QueryRow("SELECT * WHERE id=?", id).Scan(
+	err := ds.DB.QueryRow("SELECT id, experiment_id, user_id, created_at, texture, cost, beta, final_score, text_response, prolific_metadata FROM sessions WHERE id=?", id).Scan(
 		&session.ID,
 		&session.ExperimentId,
 		&session.UserId,

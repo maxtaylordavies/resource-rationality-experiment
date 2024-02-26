@@ -56,9 +56,12 @@ export const chooseTile = (
   heatmap: Heatmap,
   beta: number
 ): number => {
-  let probs = tiles.map((tile) => Math.exp(heatmap[tile.row][tile.col] / beta));
-  const sum = probs.reduce((a, b) => a + b, 0);
-  probs = probs.map((v) => v / sum);
+  let vals = tiles.map(
+    (tile) => heatmap[tile.row][tile.col] / Math.max(...heatmap.flat())
+  );
+
+  let probs = vals.map((v) => Math.exp(v / beta));
+  probs = probs.map((v) => v / probs.reduce((a, b) => a + b, 0));
 
   const r = Math.random();
   let acc = 0;
