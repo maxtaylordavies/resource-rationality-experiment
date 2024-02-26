@@ -139,9 +139,10 @@ func (s *Server) registerRoutes() {
 	s.Router.HandleFunc("/api/sessions/create", func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
 		var payload struct {
-			ExperimentId string  `json:"experiment_id"`
-			UserId       string  `json:"user_id"`
-			Cost         float64 `json:"cost"`
+			ExperimentId     string           `json:"experiment_id"`
+			UserId           string           `json:"user_id"`
+			Cost             float64          `json:"cost"`
+			Beta             float64          `json:"beta"`
 			ProlificMetadata ProlificMetadata `json:"prolific_metadata"`
 		}
 
@@ -151,7 +152,7 @@ func (s *Server) registerRoutes() {
 			return
 		}
 
-		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.Cost, payload.ProlificMetadata)
+		session, err := s.Store.CreateSession(payload.ExperimentId, payload.UserId, payload.Cost, payload.Beta, payload.ProlificMetadata)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

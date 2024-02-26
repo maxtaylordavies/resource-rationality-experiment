@@ -16,9 +16,9 @@ type Datastore struct {
 type Heatmap [][]int
 
 type ProlificMetadata struct {
-	PRLFC_PID string `json:"PRLFC_PID"`
-	PRLFC_STUDY_ID     string `json:"PRLFC_STUDY_ID"`
-	PRLFC_SESS_ID   string `json:"PRLFC_SESS_ID"`
+	PRLFC_PID      string `json:"PRLFC_PID"`
+	PRLFC_STUDY_ID string `json:"PRLFC_STUDY_ID"`
+	PRLFC_SESS_ID  string `json:"PRLFC_SESS_ID"`
 }
 
 type Session struct {
@@ -28,6 +28,7 @@ type Session struct {
 	CreatedAt        time.Time        `json:"created_at"`
 	Texture          string           `json:"texture"`
 	Cost             float64          `json:"cost"`
+	Beta             float64          `json:"beta"`
 	FinalScore       int              `json:"final_score"`
 	TextResponse     string           `json:"text_response"`
 	ProlificMetadata ProlificMetadata `json:"prolific_metadata"`
@@ -69,7 +70,7 @@ func (ds *Datastore) RandomHeatmap(size int, bins int) Heatmap {
 }
 
 func (ds *Datastore) GetAllSessions() ([]Session, error) {
-	rows, err := ds.DB.Query("SELECT id, experiment_id, user_id, created_at, texture, cost, final_score FROM sessions")
+	rows, err := ds.DB.Query("SELECT id, experiment_id, user_id, created_at, texture, cost, beta, final_score FROM sessions")
 	if err != nil {
 		return nil, err
 	}
@@ -85,6 +86,7 @@ func (ds *Datastore) GetAllSessions() ([]Session, error) {
 			&session.CreatedAt,
 			&session.Texture,
 			&session.Cost,
+			&session.Beta,
 			&session.FinalScore,
 		)
 		if err != nil {
@@ -99,13 +101,14 @@ func (ds *Datastore) GetAllSessions() ([]Session, error) {
 func (ds *Datastore) GetSession(id int) (Session, error) {
 	var session Session
 	var pmdStr string
-	err := ds.DB.QueryRow("SELECT id, experiment_id, user_id, created_at, texture, cost, final_score, text_response, prolific_metadata FROM sessions WHERE id=?", id).Scan(
+	err := ds.DB.QueryRow("SELECT * WHERE id=?", id).Scan(
 		&session.ID,
 		&session.ExperimentId,
 		&session.UserId,
 		&session.CreatedAt,
 		&session.Texture,
 		&session.Cost,
+		&session.Beta,
 		&session.FinalScore,
 		&session.TextResponse,
 		&pmdStr,
@@ -122,8 +125,8 @@ func (ds *Datastore) GetSession(id int) (Session, error) {
 	return session, nil
 }
 
-func (ds *Datastore) CreateSession(experimentId string, userId string, cost float64, prolificData ProlificMetadata) (Session, error) {
-	stmt, err := ds.DB.Prepare("INSERT INTO sessions(experiment_id, user_id, created_at, texture, cost, final_score, text_response, prolific_metadata) values(?, ?, ?, ?, ?, ?, ?, ?)")
+func (ds *Datastore) CreateSession(experimentId string, userId string, cost float64, beta float64, prolificData ProlificMetadata) (Session, error) {
+	stmt, err := ds.DB.Prepare("INSERT INTO sessions(experiment_id, user_id, created_at, texture, cost, beta, final_score, text_response, prolific_metadata) values(?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return Session{}, err
 	}
@@ -135,14 +138,18 @@ func (ds *Datastore) CreateSession(experimentId string, userId string, cost floa
 	}
 	pmdStr := string(pmdBytes)
 
+	// for experiment 2 we don't vary texture
+	texture := "smooth"
+
 	createdAt := time.Now()
 	res, err := stmt.Exec(
 		experimentId,
 		userId,
 		createdAt,
-		"",
+		texture,
 		cost,
-	 	0,
+		beta,
+		0,
 		"",
 		pmdStr,
 	)
@@ -155,25 +162,26 @@ func (ds *Datastore) CreateSession(experimentId string, userId string, cost floa
 		return Session{}, err
 	}
 
-	// set texture based on id: "rough" if odd, "smooth" if even
-	texture := "smooth"
-	if id % 2 == 1 {
-		texture = "rough"
-	}
-	err = ds.SetSessionTexture(int(id), texture)
-	if err != nil {
-		return Session{}, err
-	}
+	// // set texture based on id: "rough" if odd, "smooth" if even
+	// texture := "smooth"
+	// if id%2 == 1 {
+	// 	texture = "rough"
+	// }
+	// err = ds.SetSessionTexture(int(id), texture)
+	// if err != nil {
+	// 	return Session{}, err
+	// }
 
 	return Session{
-		ID:           int(id),
-		ExperimentId: experimentId,
-		UserId:       userId,
-		CreatedAt:    createdAt,
-		Texture:      texture,
-		Cost:         cost,
-		FinalScore:   0,
-		TextResponse: "",
+		ID:               int(id),
+		ExperimentId:     experimentId,
+		UserId:           userId,
+		CreatedAt:        createdAt,
+		Texture:          texture,
+		Cost:             cost,
+		Beta:             beta,
+		FinalScore:       0,
+		TextResponse:     "",
 		ProlificMetadata: prolificData,
 	}, nil
 }
