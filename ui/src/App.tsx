@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { Session, useStore } from "./store";
+import { Session } from "./types";
+import { useStore } from "./store";
 import { getSession, createSession } from "./api";
 import {
   getValueFromUrlOrLocalstorage,

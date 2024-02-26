@@ -1,48 +1,8 @@
 import { create } from "zustand";
 
+import { Session, Heatmap, Pos } from "./types";
 import { INITIAL_SCORE } from "./constants";
-
-export type Session = {
-  id: number;
-  experiment_id: string;
-  user_id: string;
-  created_at: Date;
-  texture: string;
-  cost: number;
-  beta: number;
-  final_score: number;
-};
-
-export type Heatmap = number[][];
-
-export type Pos = {
-  row: number;
-  col: number;
-};
-
-export type ChoiceResult = {
-  choice: Pos[];
-  selected: number;
-};
-
-const sampleRandomChoicePair = (sideLength: number, minDist = 2): Pos[] => {
-  const randTile = () => {
-    return {
-      row: Math.floor(Math.random() * sideLength),
-      col: Math.floor(Math.random() * sideLength),
-    };
-  };
-  const dist = (p1: Pos, p2: Pos) => {
-    return Math.abs(p2.row - p1.row) + Math.abs(p2.col - p1.col);
-  };
-  const tile1 = randTile();
-  while (true) {
-    const tile2 = randTile();
-    if (dist(tile1, tile2) >= minDist) {
-      return [tile1, tile2];
-    }
-  }
-};
+import { sampleRandomChoicePair } from "./utils";
 
 export type GlobalState = {
   session: Session | null;
@@ -94,7 +54,7 @@ export const useStore = create<GlobalState>((set) => ({
   setFocusedTiles: (tiles: Pos[]) => set({ focusedTiles: tiles }),
   setRandomFocusedTiles: () =>
     set((state) => ({
-      focusedTiles: sampleRandomChoicePair(state.trueHeatmap.length),
+      focusedTiles: sampleRandomChoicePair(state.trueHeatmap.length) as Pos[],
     })),
   choiceCount: 0,
   incrementChoiceCount: () =>

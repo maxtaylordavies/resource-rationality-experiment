@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+import { Heatmap } from "../../types";
 import { COLORS, CHOICE_REWARD } from "../../constants";
-import { Heatmap, useStore } from "../../store";
+import { useStore } from "../../store";
 import { recordChoiceResult } from "../../api";
 import "./tile-grid.css";
 
@@ -30,7 +31,7 @@ export const TileGrid = ({
   const patchSize = useStore((state) => state.chosenPatchSize);
   const focusedTiles = useStore((state) => state.focusedTiles);
   const setRandomFocusedTiles = useStore(
-    (state) => state.setRandomFocusedTiles,
+    (state) => state.setRandomFocusedTiles
   );
   const incrementScore = useStore((state) => state.incrementScore);
   const incrementChoiceCount = useStore((state) => state.incrementChoiceCount);
@@ -62,7 +63,7 @@ export const TileGrid = ({
 
   const updateColors = (
     tiles: { row: number; col: number }[],
-    _colors: string[],
+    _colors: string[]
   ) => {
     const newColors = [...colors];
     tiles.forEach((tile, idx) => {
@@ -77,7 +78,7 @@ export const TileGrid = ({
     }
 
     const selected = focusedTiles.findIndex(
-      (tile) => tile.row === row && tile.col === col,
+      (tile) => tile.row === row && tile.col === col
     );
     const values = focusedTiles.map((tile) => heatmap[tile.row][tile.col]);
     if (values[selected] === Math.max(...values)) {
@@ -96,12 +97,12 @@ export const TileGrid = ({
     if (revealValues) {
       updateColors(
         focusedTiles,
-        focusedTiles.map((tile) => COLORS[heatmap[tile.row][tile.col]]),
+        focusedTiles.map((tile) => COLORS[heatmap[tile.row][tile.col]])
       );
       setTimeout(() => {
         updateColors(
           focusedTiles,
-          focusedTiles.map(() => "grey"),
+          focusedTiles.map(() => "grey")
         );
         incrementChoiceCount();
         setRandomFocusedTiles();
