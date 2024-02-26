@@ -40,8 +40,9 @@ type Pos struct {
 }
 
 type ChoiceResult struct {
-	Choice   []Pos `json:"choice"`   // list of two positions
-	Selected int   `json:"selected"` // index of selected position (i.e. 0 or 1)
+	Choice        []Pos `json:"choice"`         // list of two positions
+	AgentSelected int   `json:"agent_selected"` // index of selected position (by agent) (i.e. 0 or 1)
+	Selected      int   `json:"selected"`       // index of predicted position (by participant) (i.e. 0 or 1)
 }
 
 func CreateDatastore(dbPath string) (Datastore, error) {
@@ -126,7 +127,7 @@ func (ds *Datastore) GetSession(id int) (Session, error) {
 }
 
 func (ds *Datastore) CreateSession(experimentId string, userId string, cost float64, beta float64, prolificData ProlificMetadata) (Session, error) {
-	stmt, err := ds.DB.Prepare("INSERT INTO sessions(experiment_id, user_id, created_at, texture, cost, beta, final_score, text_response, prolific_metadata) values(?, ?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := ds.DB.Prepare("INSERT INTO sessions(experiment_id, user_id, created_at, texture, cost, beta, final_score, text_response, prolific_metadata) values(?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return Session{}, err
 	}
@@ -209,7 +210,7 @@ func (ds *Datastore) UpdateSession(sessionId int, finalScore int, textResponse s
 }
 
 func (ds *Datastore) RecordChoiceResult(sessionId int, round int, patchSize int, choiceResult ChoiceResult) error {
-	stmt, err := ds.DB.Prepare("INSERT INTO choices(session_id, round, patch_size, row1, col1, row2, col2, selected) values(?, ?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := ds.DB.Prepare("INSERT INTO choices(session_id, round, patch_size, row1, col1, row2, col2, agent_selected, selected) values(?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -223,6 +224,7 @@ func (ds *Datastore) RecordChoiceResult(sessionId int, round int, patchSize int,
 		choiceResult.Choice[0].Col,
 		choiceResult.Choice[1].Row,
 		choiceResult.Choice[1].Col,
+		choiceResult.AgentSelected,
 		choiceResult.Selected,
 	)
 

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 
 import { Heatmap } from "../../types";
 import { COLORS, CHOICE_REWARD } from "../../constants";
+import { chooseTile } from "../../utils";
 import { useStore } from "../../store";
 import { recordChoiceResult } from "../../api";
 import "./tile-grid.css";
@@ -77,11 +78,12 @@ export const TileGrid = ({
       return;
     }
 
-    const selected = focusedTiles.findIndex(
+    const participantChoiceIdx = focusedTiles.findIndex(
       (tile) => tile.row === row && tile.col === col
     );
-    const values = focusedTiles.map((tile) => heatmap[tile.row][tile.col]);
-    if (values[selected] === Math.max(...values)) {
+    const agentChoiceIdx = chooseTile(focusedTiles, heatmap, session.beta);
+
+    if (participantChoiceIdx === agentChoiceIdx) {
       incrementScore(CHOICE_REWARD);
     } else {
       incrementScore(-CHOICE_REWARD);
@@ -90,7 +92,8 @@ export const TileGrid = ({
     if (recordChoices) {
       await recordChoiceResult(session.id, round, patchSize, {
         choice: focusedTiles,
-        selected,
+        agent_selected: agentChoiceIdx,
+        selected: participantChoiceIdx,
       });
     }
 

@@ -52,17 +52,22 @@ export const sampleRandomChoicePair = (
 };
 
 export const chooseTile = (
-  p1: Pos,
-  p2: Pos,
+  tiles: Pos[],
   heatmap: Heatmap,
   beta: number
-): Pos => {
-  const prob1 = Math.exp(heatmap[p1.row][p1.col] / beta);
-  const prob2 = Math.exp(heatmap[p2.row][p2.col] / beta);
-  const rand = Math.random();
-  if (rand < prob1 / (prob1 + prob2)) {
-    return p1;
-  } else {
-    return p2;
+): number => {
+  let probs = tiles.map((tile) => Math.exp(heatmap[tile.row][tile.col] / beta));
+  const sum = probs.reduce((a, b) => a + b, 0);
+  probs = probs.map((v) => v / sum);
+
+  const r = Math.random();
+  let acc = 0;
+  for (let i = 0; i < probs.length; i++) {
+    acc += probs[i];
+    if (r < acc) {
+      return i;
+    }
   }
+
+  return -1;
 };

@@ -18,5 +18,6 @@ export type Pos = {
 
 export type ChoiceResult = {
   choice: Pos[];
+  agent_selected: number;
   selected: number;
 };
