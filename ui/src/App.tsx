@@ -77,7 +77,8 @@ const App = () => {
           getValueFromUrlOrLocalstorage("expid"),
           getValueFromUrlOrLocalstorage("userid"),
           Number(getValueFromUrlOrLocalstorage("cost")),
-          getProlificMetadata(),
+          Number(getValueFromUrlOrLocalstorage("beta")),
+          getProlificMetadata()
         )) as Session;
       }
 

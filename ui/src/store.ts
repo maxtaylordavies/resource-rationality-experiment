@@ -9,6 +9,7 @@ export type Session = {
   created_at: Date;
   texture: string;
   cost: number;
+  beta: number;
   final_score: number;
 };
 

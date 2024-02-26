@@ -10,12 +10,14 @@ export const createSession = async (
   experimentId: string,
   userId: string,
   cost: number,
-  prolificMetadata: { [key: string]: string },
+  beta: number,
+  prolificMetadata: { [key: string]: string }
 ): Promise<Session> => {
   const response = await api.post("/sessions/create", {
     experiment_id: experimentId,
     user_id: userId,
     cost,
+    beta,
     prolific_metadata: prolificMetadata,
   });
   return response.data;
@@ -29,7 +31,7 @@ export const getSession = async (sessionId: number): Promise<Session> => {
 export const updateSession = async (
   sessionId: number,
   finalScore: number,
-  textResponse: string,
+  textResponse: string
 ) => {
   await api.post("/sessions/update", {
     id: sessionId,
@@ -46,10 +48,10 @@ export const getTutorialHeatmap = async (): Promise<Heatmap> => {
 export const getHeatmapFromFile = async (
   texture: string,
   round: string | number,
-  patchSize: number,
+  patchSize: number
 ): Promise<Heatmap> => {
   const response = await api.get(
-    `/heatmap/from_file?texture=${texture}&round=${round}&ps=${patchSize}`,
+    `/heatmap/from_file?texture=${texture}&round=${round}&ps=${patchSize}`
   );
   return response.data;
 };
@@ -58,7 +60,7 @@ export const recordChoiceResult = async (
   sessionId: number,
   round: number,
   patchSize: number,
-  choiceResult: ChoiceResult,
+  choiceResult: ChoiceResult
 ): Promise<void> => {
   await api.post("/choices/record", {
     session_id: sessionId,
