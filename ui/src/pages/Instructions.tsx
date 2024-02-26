@@ -12,7 +12,7 @@ type ContentItem = {
 const content: ContentItem[][] = [
   [
     {
-      text: "You are going to play a short game. In this game, you have been hired to assist a local farmer.",
+      text: "You are going to play a short game. In this game, you will see a farmer.",
       imgUrl: "farmer.png",
     },
     {
@@ -22,11 +22,11 @@ const content: ContentItem[][] = [
   ],
   [
     {
-      text: "In each round of the game, you will help the farmer grow a particular vegetable crop.",
+      text: "In each round of the game, the farmer will choose between different plots to plant a vegetable crop.",
       imgUrl: "vegetables.png",
     },
     {
-      text: "You will be shown pairs of plots in the field. For each pair, choose which plot the farmer should plant in.",
+      text: "Your job is to try to predict which plot the farmer will choose, from a choice of two options.",
       imgUrl: "two-plots.png",
     },
   ],
@@ -39,10 +39,14 @@ const content: ContentItem[][] = [
       text: "You will have a map showing how suitable different plots are. Green plots are the best, red are the worst.",
       imgUrl: "colour-grid.png",
     },
+    {
+      text: "The farmer will always try to choose the best plot for the current crop, but will sometimes make mistakes!",
+      imgUrl: "thinking-face.png",
+    },
   ],
   [
     {
-      text: "You will earn coins for each correct choice, and lose coins for each incorrect choice.",
+      text: "You will earn coins for each correct prediction, and lose coins for each incorrect prediction.",
       imgUrl: "coin.png",
     },
     {
